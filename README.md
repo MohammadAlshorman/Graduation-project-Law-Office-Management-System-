@@ -40,7 +40,7 @@ A complete web-based solution for managing the daily operations of a law office,
 **Mohammad Alshorman**  
 Full Stack Web Developer
 📧 mhmdshhadhalshrman95@gmail.com  
-📞 +962777077970
+📞 +962777077970 <br>
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?logo=linkedin)](https://www.linkedin.com/in/mohammadalshorman/)
 
 ---
