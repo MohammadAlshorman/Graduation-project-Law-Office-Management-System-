@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Law_Office_Management.Models.FinancialReport>
+@{
+    ViewData["Title"] = "📊 Financial Reports";
+}
+
+<h2 class="mt-4">@ViewData["Title"]</h2>
+<a asp-action="Create" class="btn btn-success mb-3">➕ Add Report</a>
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Created By</th>
+            <th>Created At</th>
+            <th>File</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var report in Model)
+        {
+            <tr>
+                <td>@report.Title</td>
+                <td>@report.CreatedByNavigation?.Username</td>
+                <td>@report.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(report.ReportFile))
+                    {
+                        <a href="~/uploads/@report.ReportFile" target="_blank">📥 Download</a>
+                    }
+                    else
+                    {
+                        <span class="text-danger">No File</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@report.ReportId" class="btn btn-info btn-sm">👁 View</a>
+                    <a asp-action="Delete" asp-route-id="@report.ReportId" class="btn btn-danger btn-sm">🗑 Delete</a>
+                    <a asp-action="Edit" asp-route-id="@report.ReportId" class="btn btn-warning btn-sm me-1">✏️ Edit</a>
+                    <a asp-action="Download" asp-route-id="@report.ReportId" class="btn btn-sm btn-outline-primary">
+                        ⬇ Downlode
+                    </a>
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

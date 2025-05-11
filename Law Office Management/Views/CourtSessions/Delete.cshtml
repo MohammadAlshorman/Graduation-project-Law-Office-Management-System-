@@ -1,0 +1,17 @@
+﻿@model Law_Office_Management.Models.CourtSession
+@{
+    ViewData["Title"] = "Delete Session";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="text-danger mb-4">🗑️ Delete Session</h2>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete this session for case "<strong>@Model.Case?.Title</strong>"?
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="SessionId" />
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

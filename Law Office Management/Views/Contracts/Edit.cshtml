@@ -1,0 +1,55 @@
+﻿@model Law_Office_Management.Models.Contract
+@{
+    ViewData["Title"] = "Edit Contract";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var clients = ViewData["Clients"] as List<Law_Office_Management.Models.Client>;
+    var lawyers = ViewData["Lawyers"] as List<Law_Office_Management.Models.Lawyer>;
+}
+
+<h2 class="mb-4">✏️ Edit Contract</h2>
+
+<form asp-action="Edit" method="post" enctype="multipart/form-data" class="shadow-sm p-4 bg-white rounded">
+    <input type="hidden" asp-for="ContractId" />
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Title</label>
+        <input asp-for="Title" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ClientId" class="form-label">Client</label>
+        <select asp-for="ClientId" class="form-select" asp-items="@(new SelectList(clients, "ClientId", "FullName", Model.ClientId))"></select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LawyerId" class="form-label">Lawyer</label>
+        <select asp-for="LawyerId" class="form-select" asp-items="@(new SelectList(lawyers, "LawyerId", "FullName", Model.LawyerId))"></select>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="StartDate" class="form-label">Start Date</label>
+            <input asp-for="StartDate" type="date" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="EndDate" class="form-label">End Date</label>
+            <input asp-for="EndDate" type="date" class="form-control" />
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Replace Contract File (PDF)</label>
+        <input type="file" name="file" class="form-control" />
+
+        @if (!string.IsNullOrEmpty(Model.FilePath))
+        {
+            <div class="mt-2">
+                Current File: <a href="@Model.FilePath" target="_blank">📄 View</a>
+            </div>
+        }
+    </div>
+
+    <button type="submit" class="btn btn-success">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

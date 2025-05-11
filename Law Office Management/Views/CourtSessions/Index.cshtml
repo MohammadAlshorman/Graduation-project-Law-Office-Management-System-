@@ -1,0 +1,45 @@
+﻿@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
+    var isLawyer = role == "Lawyer";
+}
+
+@model IEnumerable<Law_Office_Management.Models.CourtSession>
+
+@{
+    ViewData["Title"] = "Court Sessions";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-4">⚖️ Court Sessions</h2>
+<a asp-action="Create" class="btn btn-primary mb-3">➕ Add Session</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Case</th>
+            <th>Lawyer</th>
+            <th>Date</th>
+            <th>Location</th>
+            <th>Notes</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var s in Model)
+        {
+            <tr>
+                <td>@s.Case?.Title</td>
+                <td>@s.Case?.Lawyer?.FullName</td>
+                <td>@s.SessionDate?.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@s.Location</td>
+                <td>@s.Notes</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@s.SessionId" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@s.SessionId" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@s.SessionId" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,49 @@
+﻿@model IEnumerable<Law_Office_Management.Models.Contract>
+@{
+    ViewData["Title"] = "Contracts";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-4">📑 Contracts</h2>
+<a asp-action="Create" class="btn btn-primary mb-3">➕ Add Contract</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Client</th>
+            <th>Lawyer</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>File</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contract in Model)
+        {
+            <tr>
+                <td>@contract.Title</td>
+                <td>@contract.Client?.FullName</td>
+                <td>@contract.Lawyer?.FullName</td>
+                <td>@contract.StartDate?.ToString("yyyy-MM-dd")</td>
+                <td>@contract.EndDate?.ToString("yyyy-MM-dd")</td>
+                <td>
+                    @if (!string.IsNullOrEmpty(contract.FilePath))
+                    {
+                        <a href="@contract.FilePath" target="_blank">📥 View File</a>
+                    }
+                    else
+                    {
+                        <span class="text-muted">No File</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@contract.ContractId" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@contract.ContractId" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@contract.ContractId" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

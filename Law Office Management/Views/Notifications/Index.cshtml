@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Law_Office_Management.Models.Notification>
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Notifications";
+    var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
+    var userId = HttpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+    bool isAdmin = role == "Admin";
+}
+
+<h2>🔔 Notifications</h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@if (isAdmin)
+{
+    <a asp-action="Create" class="btn btn-success mb-3">➕ Create New Notification</a>
+}
+
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Message</th>
+            <th>User</th>
+            <th>Type</th>
+            <th>Case</th>
+            <th>Created At</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var noti in Model)
+        {
+            var isRead = noti.IsRead ?? false;
+
+            <tr class="@(isRead ? "" : "table-warning")">
+                <td>@noti.Title</td>
+                <td>@noti.Message</td>
+                <td>@noti.User?.Username</td>
+                <td>@noti.Type</td>
+                <td>@noti.RelatedCase?.Title</td>
+                <td>@noti.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@(isRead ? "✅ Read" : "🕒 Unread")</td>
+                <td>
+                    @if (!isRead)
+                    {
+                        <a asp-action="MarkAsRead" asp-route-id="@noti.NotificationId" class="btn btn-sm btn-outline-success me-1">
+                            👁️ Mark as Read
+                        </a>
+                    }
+
+                    @if (isAdmin)
+                    {
+                        <a asp-action="Delete" asp-route-id="@noti.NotificationId" class="btn btn-sm btn-danger">🗑️ Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

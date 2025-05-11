@@ -1,0 +1,67 @@
+﻿@model IEnumerable<Law_Office_Management.Models.AttendanceRecord>
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Attendance Records";
+    var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
+    var userId = HttpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+    bool isAdmin = role == "Admin";
+    bool isLawyer = role == "Lawyer";
+}
+
+<h2>🕒 Attendance Records</h2>
+
+@if (isAdmin || isLawyer)
+{
+    <a asp-action="Create" class="btn btn-success mb-3">➕ Add New Record</a>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>Lawyer</th>
+            <th>Check In</th>
+            <th>Check Out</th>
+            <th>Notes</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var record in Model)
+        {
+            if (isLawyer && record.Lawyer?.UserId != userId)
+            {
+                continue;
+            }
+
+            <tr>
+                <td>@record.Lawyer?.FullName</td>
+                <td>@record.CheckInTime?.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@(record.CheckOutTime.HasValue ? record.CheckOutTime.Value.ToString("yyyy-MM-dd HH:mm") : "—")</td>
+                <td>@record.Notes</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@record.AttendanceId" class="btn btn-sm btn-info">View</a>
+
+                    @if (isAdmin)
+                    {
+                        <a asp-action="Edit" asp-route-id="@record.AttendanceId" class="btn btn-sm btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@record.AttendanceId" class="btn btn-sm btn-danger">Delete</a>
+                    }
+
+                    @* ✅ عرض زر Check Out فقط إذا لم يُسجل مسبقًا *@
+                    @if (record.CheckOutTime == null && (isAdmin || (isLawyer && record.Lawyer?.UserId == userId)))
+                    {
+                        <form asp-action="MarkCheckOut" asp-route-id="@record.AttendanceId" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-outline-success btn-sm">🚪 Check Out</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

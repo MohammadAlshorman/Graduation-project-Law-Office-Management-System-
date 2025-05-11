@@ -1,0 +1,177 @@
+﻿@using Newtonsoft.Json
+
+@{
+    ViewData["Title"] = "ContactUS";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Start Page Title Area -->
+<div class="page-title-area style-four " style=" background-image: url(../../uploadss/setting/1633529701page_title.jpg);">
+    <div class="container">
+        <div class="page-title-content text-start">
+            <h4>اتصل بنا  / فرع عمان</h4>
+            <ul>
+                <li><a asp-area="" asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                <li>اتصل بنا  / فرع عمان </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- End Page Title Area -->
+<!-- Start Contact Area -->
+<div class="contact-area pt-4 pb-4">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-3 col-sm-6 col-md-6">
+                <div class="single-contact-info-box style-two">
+                    <div class="icon">
+                        <i class='fas fa-map-marker-alt'></i>
+                    </div>
+                    <h3>العنوان</h3>
+                    <p>عمان - دوار عبدون</p>
+
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-sm-6 col-md-6">
+                <div class="single-contact-info-box style-two">
+                    <div class="icon">
+                        <i class='fas fa-phone-volume'></i>
+                    </div>
+                    <h3>رقم الهاتف</h3>
+                    <p>962777077970</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-sm-6 col-md-6">
+                <div class="single-contact-info-box style-two">
+                    <div class="icon">
+                        <i class='far fa-envelope'></i>
+                    </div>
+                    <h3>البريد الإلكتروني</h3>
+                    <p>info@drmohammad.com</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-sm-6 col-md-6">
+                <div class="single-contact-info-box style-two">
+                    <div class="icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <h3>رقم الواتساب</h3>
+                    <p><a href="https://wa.me/962777077970" target="_blank">962777077970</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="contact-area pt-70 pb-70">
+    <div class="container">
+        <div class="section-title">
+            <span class="sub-title">اتصل بنا</span>
+            <h2>يسعدنا تواصلكم معنا </h2>
+        </div>
+
+        <div class="contact-form m-0">
+            @* عرض رسائل النجاح أو الخطأ *@
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success text-center mb-4">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+            @if (TempData["ErrorMessage"] != null)
+            {
+                <div class="alert alert-danger text-center mb-4">
+                    @TempData["ErrorMessage"]
+                </div>
+            }
+
+            <form asp-action="ContactUS" method="post">
+                @Html.AntiForgeryToken()
+                <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="form-group">
+                            <input type="text" name="FullName" class="form-control" id="name" required placeholder="الاسم">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="form-group">
+                            <input type="email" name="Email" class="form-control" id="email" required placeholder="البريد الإلكتروني">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="form-group">
+                            <input type="number" name="PhoneNumber" class="form-control" id="phone_number" required placeholder="رقم الهاتف">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6">
+                        <div class="form-group">
+                            <input type="text" name="Subject" class="form-control" id="msg_subject" placeholder="عنوان الرسالة" required>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <div class="form-group">
+                            <textarea name="MessageText" id="message" class="form-control" cols="30" rows="6" required placeholder="نص الرسالة"></textarea>
+                        </div>
+                    </div>
+                    <!-- reCAPTCHA -->
+                    <div class="col-lg-12 col-md-12 col-sm-12 text-center mb-3">
+                        <div class="g-recaptcha" data-sitekey="6LdTbSsrAAAAAKBzEj9_jBxMwFrQw3TqYLGBPDeQ"></div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 text-center">
+                        <button type="submit" class="default-btn">أرسل رسالتك </button>
+                    </div>
+
+                  
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<!-- End Contact Area -->
+
+<div id="maps">
+    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3385.440944489872!2d35.8928373!3d31.948932299999992!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151ca0f33d0576c5%3A0xd27c4f27fdf66534!2z2K8uINi52KjYr9mI2YbYjCDYudmF2ZHYp9mG!5e0!3m2!1sar!2sjo!4v1737912496250!5m2!1sar!2sjo" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        window.onload = function () {
+                 var success = @Html.Raw(JsonConvert.SerializeObject(TempData["SuccessMessage"]));
+        var error = @Html.Raw(JsonConvert.SerializeObject(TempData["ErrorMessage"]));
+
+
+            if (success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'تم الإرسال!',
+                    text: success,
+                    confirmButtonText: 'حسناً',
+                    timer: 4000,
+                    timerProgressBar: true
+                });
+            } else if (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطأ!',
+                    text: error,
+                    confirmButtonText: 'حاول مرة أخرى'
+                });
+            }
+        };
+    </script>
+}
+
+<script src="https://www.google.com/recaptcha/api.js" async defer></script>

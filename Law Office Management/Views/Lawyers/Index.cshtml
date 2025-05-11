@@ -1,0 +1,59 @@
+﻿@model IEnumerable<Law_Office_Management.Models.Lawyer>
+
+@{
+    ViewData["Title"] = "Lawyers";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-4">👨‍⚖️ All Lawyers</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">➕ Add New Lawyer</a>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+}
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Full Name</th>
+            <th>Specialty</th>
+            <th>Phone</th>
+            <th>Email</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var lawyer in Model)
+        {
+            <tr>
+                <td>@lawyer.LawyerId</td>
+                <td>@lawyer.FullName</td>
+                <td>@lawyer.Specialty</td>
+                <td>@lawyer.Phone</td>
+                <td>@lawyer.Email</td>
+                <td>
+                    @if (lawyer.IsActive == true)
+                    {
+                        <span class="badge bg-success">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Inactive</span>
+                    }
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@lawyer.LawyerId" class="btn btn-info btn-sm">📄 Details</a>
+                    <a asp-action="Edit" asp-route-id="@lawyer.LawyerId" class="btn btn-warning btn-sm">✏️ Edit</a>
+                    <a asp-action="Delete" asp-route-id="@lawyer.LawyerId" class="btn btn-danger btn-sm">🗑 Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

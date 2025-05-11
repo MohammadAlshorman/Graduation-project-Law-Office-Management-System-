@@ -1,0 +1,112 @@
+﻿@model IEnumerable<Law_Office_Management.Models.Document>
+
+@{
+    ViewData["Title"] = "Documents";
+    var primaryColor = "#F18A00"; // Primary Color Variable
+}
+
+<style>
+    :root {
+        --primary-color: @primaryColor;
+    }
+
+    .custom-header {
+        background: linear-gradient(145deg, @primaryColor, #ff9e2c);
+        color: white !important;
+        border: none;
+        padding: 1rem;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(241, 138, 0, 0.05);
+        transform: scale(1.005);
+        transition: all 0.2s ease;
+    }
+
+    .action-buttons .btn {
+        margin: 2px;
+        min-width: 90px;
+        font-size: 0.85rem;
+        border-radius: 20px;
+    }
+
+    .badge-private {
+        background: @primaryColor;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+    }
+</style>
+
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold" style="color: @primaryColor">📁 Document Management</h2>
+        <a asp-action="Create" class="btn btn-primary" style="background-color: @primaryColor; border: none">
+            ➕ Upload New
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-header custom-header">
+            <h5 class="mb-0">Documents List</h5>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr class="bg-light">
+                            <th>File Name</th>
+                            <th>Type</th>
+                            <th>Document Type</th>
+                            <th>Related Case</th>
+                            <th>Uploaded By</th>
+                            <th>Upload Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var doc in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="badge bg-secondary me-2">@doc.FileType</span>
+                                    @doc.FileName
+                                </td>
+                                <td>@doc.FileType</td>
+                                <td>@doc.DocumentType</td>
+                                <td>@doc.Case?.Title</td>
+                                <td>@doc.UploadedByNavigation?.Username</td>
+                                <td>@doc.UploadDate?.ToString("MMM dd, yyyy HH:mm")</td>
+                                <td>
+                                    @if (doc.IsPrivate == true)
+                                    {
+                                        <span class="badge-private">🔒 Private</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">🔓 Public</span>
+                                    }
+                                </td>
+                                <td class="action-buttons">
+                                    <div class="d-flex flex-wrap">
+                                        <a asp-action="Details" asp-route-id="@doc.DocumentId"
+                                           class="btn btn-sm btn-outline-secondary">👁️ View</a>
+                                        <a asp-action="Edit" asp-route-id="@doc.DocumentId"
+                                           class="btn btn-sm btn-outline-warning">✏️ Edit</a>
+                                        <a asp-action="Delete" asp-route-id="@doc.DocumentId"
+                                           class="btn btn-sm btn-outline-danger">🗑️ Delete</a>
+                                        <a asp-action="Download" asp-route-id="@doc.DocumentId"
+                                           class="btn btn-sm btn-outline-primary">⬇️ Download</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

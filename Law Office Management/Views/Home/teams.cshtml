@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "teams";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var team = new[]
+    {
+        new { Name = "الدكتور محمد علي الشرمان", Role = "مؤسس المكتب", ImagePath = "~/uploadss/teams/1637477429emad.png" },
+        new { Name = "محمد العفيف", Role = "قاض سابق", ImagePath = "https://albaladnews.net/assets/2020-09-03/images/283551_59_1599122246.jpg" },
+        new { Name = "رنده عطوه", Role = "محامية", ImagePath = "https://alsaa.net/webp/new_209638_1086_800.webp" },
+        new { Name = "ولاء", Role = "محامية", ImagePath = "https://media.licdn.com/dms/image/v2/D4D03AQG17CFgscr0Hw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1716221032627?e=2147483647&v=beta&t=UU6eavJBtgieokspbWLSehRSsVJ2S2UbSkzn3NPbZNQ" },
+        new { Name = "سامر الدويك", Role = "مستشار في القانون/ التحكيم التجاري", ImagePath = "https://media.licdn.com/dms/image/v2/D4E03AQG_kitYThPvjA/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1693952989326?e=2147483647&v=beta&t=uNwHyG4RqP2kDlcxYnKLUZypmhRZDBjKIdUPzdHrJ78" },
+        new { Name = "احسان عبدالعزيز", Role = "مستشار في القانون العام/ الجنايات", ImagePath = "https://jawharatarabnews.net/assets/2021-12-07/images/65624_1_1638905164.png" },
+        new { Name = " عامر الطرزي", Role = "قاض سابق ومستشار قانوني", ImagePath = "https://amer-tarazi.com/wp-content/themes/%D9%82%D8%A7%D9%84%D8%A8%20%D9%85%D8%AD%D8%A7%D9%85%D9%8A%20%D8%A7%D9%84%D8%A7%D8%B1%D8%AF%D9%86/assets/img/5-1.png" },
+                new { Name = "أنوار المهيرات", Role = "محامية", ImagePath = "https://nbnjo.com/assets/2021-09-10/images/146186_15_1631264207.jpeg" },
+
+    };
+}
+
+<!-- Start Page Title Area -->
+<div class="page-title-area style-four" style="background-image: url(../uploadss/setting/1633529701page_title.jpg);">
+    <div class="container">
+        <div class="page-title-content text-start">
+            <h3>فريق العمل</h3>
+            <ul>
+                <li><a asp-area="" asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                <li>فريق العمل</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Start Team Area -->
+<div class="row justify-content-center" style="padding: 40px 0;">
+    @foreach (var member in team)
+    {
+        <div class="col-md-3 mb-4">
+            <div style="text-align: center; padding: 15px; background-color: #f9f9f9; border-radius: 20px; box-shadow: 0 4px 8px rgba(0,0,0,0.05);">
+                <img src="@Url.Content(member.ImagePath)"
+                     alt="@member.Name"
+                     style="width: 100%; height: 250px; object-fit: contain; background-color: #fff; border: 4px solid #ddd; border-radius: 15px; margin-bottom: 10px;" />
+                <div>
+                    <h3 style="font-size: 16px; margin: 5px 0;">@member.Name</h3>
+                    <span style="color: #555;">@member.Role</span>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<!-- End Team Area -->

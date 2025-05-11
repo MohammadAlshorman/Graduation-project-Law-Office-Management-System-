@@ -1,0 +1,43 @@
+﻿@model Law_Office_Management.Models.Lawyer
+
+@{
+    ViewData["Title"] = "➕ Add Lawyer";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="FullName"></label>
+        <input asp-for="FullName" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Specialty"></label>
+        <input asp-for="Specialty" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" required />
+    </div>
+    <hr />
+    <h5>Create Login Info:</h5>
+    <div class="mb-3">
+        <label>Username</label>
+        <input name="Username" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label>Password</label>
+        <input name="Password" type="password" class="form-control" required />
+    </div>
+    <div class="form-check mb-3">
+        <input asp-for="IsActive" class="form-check-input" type="checkbox" />
+        <label asp-for="IsActive" class="form-check-label"></label>
+    </div>
+    <button type="submit" class="btn btn-primary">✅ Save</button>
+    <a asp-action="Index" class="btn btn-secondary">↩ Back</a>
+</form>

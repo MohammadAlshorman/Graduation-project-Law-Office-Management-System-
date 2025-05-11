@@ -1,0 +1,40 @@
+﻿@model Law_Office_Management.Models.AppTask
+@{
+    ViewData["Title"] = "Create Task";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label>Title</label>
+        <input asp-for="Title" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Description</label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+    </div>
+    <div class="form-group">
+        <label>Lawyer</label>
+        <select asp-for="LawyerId" class="form-control">
+            <option value="">-- Select Lawyer --</option>
+            @foreach (var lawyer in (List<Lawyer>)ViewData["LawyerList"])
+            {
+                <option value="@lawyer.LawyerId">@lawyer.FullName</option>
+            }
+        </select>
+    </div>
+    <div class="form-group">
+        <label>Due Date</label>
+        <input asp-for="DueDate" type="date" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Status</label>
+        <select asp-for="IsCompleted" class="form-control">
+            <option value="false">In Progress</option>
+            <option value="true">Completed</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Save</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

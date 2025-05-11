@@ -1,0 +1,53 @@
+﻿@model Law_Office_Management.Models.Document
+
+@{
+    ViewData["Title"] = "Edit Document";
+}
+
+<h2>✏️ Edit Document Info</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="DocumentId" />
+
+    <div class="form-group mb-3">
+        <label>Case</label>
+        <select asp-for="CaseId" class="form-control" required>
+            <option value="">Select Case</option>
+            @foreach (var c in (List<Case>)ViewData["CaseList"])
+            {
+                <option value="@c.CaseId" selected="@(c.CaseId == Model.CaseId)">
+                    @c.Title
+                </option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Document Type</label>
+        <input asp-for="DocumentType" class="form-control" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Is Private?</label>
+        <select asp-for="IsPrivate" class="form-control">
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Uploaded By</label>
+        <select asp-for="UploadedBy" class="form-control">
+            <option value="">Select User</option>
+            @foreach (var u in (List<User>)ViewData["UserList"])
+            {
+                <option value="@u.UserId" selected="@(u.UserId == Model.UploadedBy)">
+                    @u.Username
+                </option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

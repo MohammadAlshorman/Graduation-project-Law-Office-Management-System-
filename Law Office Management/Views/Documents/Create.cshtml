@@ -1,0 +1,52 @@
+﻿@model Law_Office_Management.Models.Document
+
+@{
+    ViewData["Title"] = "Upload Document";
+}
+
+<h2>📤 Upload New Document</h2>
+
+<form asp-action="Create" enctype="multipart/form-data" method="post">
+    <div class="form-group mb-3">
+        <label>Case</label>
+        <select asp-for="CaseId" class="form-control" required>
+            <option value="">Select Case</option>
+            @foreach (var c in (List<Case>)ViewData["CaseList"])
+            {
+                <option value="@c.CaseId">@c.Title</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Upload File</label>
+        <input type="file" name="file" class="form-control" required />
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Document Type</label>
+        <input asp-for="DocumentType" class="form-control" placeholder="e.g., Memorandum, Proof Document" />
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Is Private?</label>
+        <select asp-for="IsPrivate" class="form-control">
+            <option value="false">No</option>
+            <option value="true">Yes</option>
+        </select>
+    </div>
+
+    <div class="form-group mb-3">
+        <label>Uploaded By</label>
+        <select asp-for="UploadedBy" class="form-control">
+            <option value="">Select User</option>
+            @foreach (var u in (List<User>)ViewData["UserList"])
+            {
+                <option value="@u.UserId">@u.Username</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Upload</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

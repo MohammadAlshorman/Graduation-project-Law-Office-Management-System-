@@ -1,0 +1,29 @@
+﻿@model Law_Office_Management.Models.CourtSession
+@{
+    ViewData["Title"] = "Session Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-4">📄 Session Details</h2>
+
+<div class="card p-4">
+    <dl class="row">
+        <dt class="col-sm-3">Case</dt>
+        <dd class="col-sm-9">@Model.Case?.Title</dd>
+
+        <dt class="col-sm-3">Lawyer</dt>
+        <dd class="col-sm-9">@Model.Case?.Lawyer?.FullName</dd>
+
+        <dt class="col-sm-3">Date</dt>
+        <dd class="col-sm-9">@Model.SessionDate?.ToString("yyyy-MM-dd HH:mm")</dd>
+
+        <dt class="col-sm-3">Location</dt>
+        <dd class="col-sm-9">@Model.Location</dd>
+
+        <dt class="col-sm-3">Notes</dt>
+        <dd class="col-sm-9">@Model.Notes</dd>
+    </dl>
+
+    <a asp-action="Edit" asp-route-id="@Model.SessionId" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</div>

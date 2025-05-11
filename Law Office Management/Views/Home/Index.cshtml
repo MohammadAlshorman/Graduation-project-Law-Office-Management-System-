@@ -1,0 +1,180 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Home Page";
+    var services = new[]
+           {
+        new { Icon = "fas fa-university", Title = "الاستشـــارات القانونيــة", Desc = "يقدم المكتب الاستشارات القانونية عن طريق نخبة متميزة من المستشارين المتخصصين في المجال القانوني" },
+        new { Icon = "fas fa-university", Title = "الدعاوى المدنية", Desc = "كافة أنواع وأفرع القضايا المدنية المتنوعة الناشئة عن المعاملات والعقود المدنية..." },
+        new { Icon = "fas fa-file-signature", Title = "منازعات التشييد والبناء", Desc = "الترافع وتمثيل العملاء أمام القضاء في منازعات التشييد والبناء" },
+        new { Icon = "fas fa-balance-scale-right", Title = "الدعاوى العمالية", Desc = "إقامة الدعاوى والمرافعة في كافة المنازعات العمالية للشركات والأفراد" },
+        new { Icon = "fas fa-balance-scale-right", Title = "الدعاوى التجارية", Desc = "جميع المنازعات التجارية التي تحدث بين التجار والدعاوى المتعلقة بأعمالهم" },
+        new { Icon = "fas fa-balance-scale-left", Title = "الدعاوى الشرعية", Desc = "قضايا الأسرة والأحوال الشخصية بإشراف محامين مختصين" },
+        new { Icon = "fas fa-university", Title = "صياغة العقود", Desc = "صياغة كافة أنواع العقود باحترافية عالية" },
+        new { Icon = "fas fa-balance-scale-left", Title = "الدعاوى الجزائية", Desc = "المرافعة في قضايا الجنايات والجنح" },
+        new { Icon = "fas fa-balance-scale", Title = "الملكية الفكرية وحقوق النشر", Desc = "دعوى الملكية الفكرية للمصنفات والأسماء والاختراعات" },
+        new { Icon = "fas fa-balance-scale", Title = "الدعاوى الإدارية", Desc = "الدعاوى ضد الجهات الإدارية والنزاعات مع المؤسسات الرسمية" },
+        new { Icon = "fas fa-balance-scale-left", Title = "التحكيم", Desc = "تمثيل العملاء في قضايا التحكيم المحلي والدولي" },
+        new { Icon = "fas fa-balance-scale-left", Title = "الوساطة والتسويات", Desc = "حل النزاعات ودياً من خلال مفاوضين متخصصين" },
+        new { Icon = "fas fa-balance-scale-left", Title = "تنفيذ الأحكام الأجنبية", Desc = "تنفيذ الأحكام القضائية والتحكيمية الصادرة من الخارج" }
+    };
+}
+
+
+<!-- Start Banner Area -->
+<!-- Start Furniture Banner Area -->
+<div class="furniture-banner-slides owl-carousel owl-theme">
+
+    <div class="furniture-banner-item" style="background-image: url(uploadss/sliders/1633528467slider2.png); ">
+    </div>
+    <div class="furniture-banner-item" style="background-image: url(uploadss/sliders/1633528482slider05.png);">
+    </div>
+
+</div>
+<!-- End Furniture Banner Area -->
+<!-- End Banner Area -->
+<!-- Start Features Area -->
+<!-- Start Features Area -->
+<div class="features-area pt-4 pb-4">
+    <div class="container">
+        <div class="section-title">
+            <h3>خدماتنا</h3>
+        </div>
+
+        <div class="row justify-content-center">
+            @foreach (var s in services)
+            {
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="single-features-box">
+                        <i class="@s.Icon"></i>
+                        <h3>@s.Title</h3>
+                        <p>@s.Desc</p>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<!-- End Features Area -->
+<!-- End Features Area -->
+<!-- Start About Area -->
+<!-- Start About Area -->
+<div class="startup-about-area pt-70 pb-70" style="background-color: rgba(232,232,232,0.76)">
+    <div class="container-fluid">
+
+        <div class="row align-items-center">
+            <div class="col-md-6 text-center">
+                <div class="">
+                    <img src="uploadss/about/1633529333about_logo.png" alt="image" width="80%">
+                </div>
+            </div>
+
+
+
+
+
+
+
+
+            <div class="col-md-6">
+                <div class="startup-about-content">
+                    <h4>الدكتور محمد الشرمان للمحاماة والاستشارات القانونية للمحاماة والاستشارات القانونية</h4>
+                    <p>
+                    <p dir="rtl">
+                        <strong>
+                            <span style="font-size:18px">
+                                إحدى المؤسسات الوطنية الرائدة في مجال
+                                المحاماة&nbsp;
+                            </span>
+                        </strong>
+                    </p>
+
+                    <p dir="rtl">
+                        <strong>
+                            <span style="font-size:18px">
+                                والاستشارات القانونية الأردن
+                                عمان&nbsp;
+                            </span>
+                        </strong>
+                    </p>
+
+                    <p dir="rtl">
+                        <span style="font-size:18px">
+                            مؤسسة قانونية تقدم خدمات قانونية مميزة
+                            لعملائها&nbsp;
+                        </span>
+                    </p>
+
+                    <p dir="rtl"><span style="font-size:18px">(محامون ـ محكمون ـ مستشارون قانونيون)</span></p>
+
+                    <p dir="rtl">
+                        <span style="font-size:18px">
+                            تقديم خدماتنا القانونية: للأفراد، والمؤسسات والشركات
+                            التجارية، والوزارات والهيئات الحكومية، والهيئات الدبلوماسية، والمستثمرين من خلال فروع
+                            المكتب
+                        </span>
+                    </p>
+
+                    <p dir="rtl" style="text-align:justify">&nbsp;</p>
+                    </p>
+                    <a asp-area="" asp-controller="Home" asp-action="about_us" class="default-btn">إقرأ المزيد .. </a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<!-- End About Area -->
+<!-- End About Area -->
+<!-- Start Projects-->
+<!-- End Projects -->
+<!-- Start Team Area -->
+<!-- End Team Area -->
+<!-- Start Blog Area -->
+<!-- Start Blog Area -->
+<div class="blog-area pt-70 pb-70" style="background-color: rgba(243,250,237,0.68)">
+    <div class="container">
+        <div class="section-title">
+            <h3>مدونة الموقع</h3>
+        </div>
+
+        <div class="row justify-content-center">
+        </div>
+    </div>
+</div>
+<!-- End Blog Area -->
+<!-- End Blog Area -->
+<!-- Start Blog Area -->
+<!-- Start About Area -->
+<div class="startup-about-area" style="background-color: #ffffff">
+    <div class="container-fluid">
+
+        <div class="row align-items-center">
+
+            <div class="col-md-6 text-center">
+                <br>
+                <h6> فرع عمان </h6>
+                <br>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d1952.2341733183437!2d35.89228360925496!3d31.94826741820732!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z2YXYrdin2YXZiiDYr9in2KjZiNmC!5e0!3m2!1sar!2som!4v1737902762107!5m2!1sar!2som"
+                        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <br>
+                <br>
+            </div>
+            <div class="col-md-6 text-center">
+                <br>
+                <h6> فرع إربد </h6>
+                <br>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d6489.7186321681775!2d35.87782646623126!3d32.5337333371109!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!2m1!1z2YXYrdin2YXZiiDYr9in2KjZiNmC!5e0!3m2!1sar!2som!4v1737902870408!5m2!1sar!2som"
+                        width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <br>
+                <br>
+            </div>
+
+        </div>
+
+    </div>
+</div>
+<!-- End About Area -->
+<!-- End Blog Area -->

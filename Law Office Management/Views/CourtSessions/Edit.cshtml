@@ -1,0 +1,35 @@
+﻿@model Law_Office_Management.Models.CourtSession
+@{
+    ViewData["Title"] = "Edit Session";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var cases = ViewData["Cases"] as IEnumerable<Law_Office_Management.Models.Case>;
+}
+
+<h2 class="mb-4">✏️ Edit Court Session</h2>
+
+<form asp-action="Edit" method="post" class="shadow-sm p-4 bg-white rounded">
+    <input type="hidden" asp-for="SessionId" />
+
+    <div class="mb-3">
+        <label asp-for="CaseId" class="form-label">Case</label>
+        <select asp-for="CaseId" class="form-select" asp-items="@(new SelectList(cases, "CaseId", "Title", Model.CaseId))"></select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="SessionDate" class="form-label">Session Date</label>
+        <input asp-for="SessionDate" class="form-control" type="datetime-local" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Location" class="form-label">Location</label>
+        <input asp-for="Location" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Notes" class="form-label">Notes</label>
+        <textarea asp-for="Notes" class="form-control" rows="4"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

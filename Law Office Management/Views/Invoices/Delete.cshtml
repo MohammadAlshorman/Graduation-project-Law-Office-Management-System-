@@ -1,0 +1,27 @@
+﻿@model Law_Office_Management.Models.Invoice
+
+@{
+    ViewData["Title"] = "Delete Invoice";
+}
+
+<h2>🗑 Delete Invoice</h2>
+
+<h4>Are you sure you want to delete this invoice?</h4>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">Client</dt>
+    <dd class="col-sm-9">@Model.Client?.FullName</dd>
+
+    <dt class="col-sm-3">Amount</dt>
+    <dd class="col-sm-9">@Model.Amount?.ToString("C")</dd>
+
+    <dt class="col-sm-3">Due Date</dt>
+    <dd class="col-sm-9">@Model.DueDate?.ToString("yyyy-MM-dd")</dd>
+</dl>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="InvoiceId" />
+    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

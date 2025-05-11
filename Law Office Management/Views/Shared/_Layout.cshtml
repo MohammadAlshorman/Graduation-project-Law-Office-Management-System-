@@ -1,0 +1,719 @@
+﻿<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+@*     <title>@ViewData["Title"] - Law_Office_Management</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Law_Office_Management.styles.css" asp-append-version="true" /> *@
+
+
+
+
+
+
+@*     <meta charset="utf-8">
+ *@    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title> الدكتور محمد الشرمان للمحاماة والاستشارات القانونية </title>
+
+    <link rel="icon" type="image/png" href="~/favicon.ico" asp-append-version="true">
+
+    <meta name="keywords" content=" مكتب محاماة | استشارات قانونية  " />
+    <meta name="description" content=" الدكتور محمد الشرمان للمحاماة والاستشارات القانونية
+للمحاماة والاستشارات القانونية
+مؤسسة قانونية تقدم خدمات قانونية مميزة لعملائها  " />
+
+
+
+    <!-- Links of CSS files -->
+    <link rel="stylesheet" href="~/frontend/assets/css_rtl/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="~/frontend/assets/css_rtl/animate.min.css">
+    <link rel="stylesheet" href="~/frontend/assets/css_rtl/fontawesome.min.css">
+    <link rel="stylesheet" href="~/frontend/assets/css_rtl/magnific-popup.min.css">
+    <link rel="stylesheet" href="~/frontend/assets/css_rtl/owl.theme.default.min.css">
+    <link rel="stylesheet" href="~/frontend/assets/css_rtl/owl.carousel.min.css">
+    <link rel="stylesheet" href="~/frontend/assets/css_rtl/odometer.min.css">
+    <link rel="stylesheet" href="~/frontend/assets/css_rtl/rangeSlider.min.css">
+    <link rel="stylesheet" href="~/frontend/assets/css_rtl/showMoreItems-theme.min.css">
+    <link rel="stylesheet" href="~/frontend/assets/css_rtl/flaticon.css">
+    <link rel="stylesheet" href="~/frontend/assets/css_rtl/meanmenu.min.css">
+    <link rel="stylesheet" href="~/frontend/assets/css_rtl/style.css">
+    <link rel="stylesheet" href="~/frontend/assets/css_rtl/responsive.css">
+
+
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400&amp;display=swap" rel="stylesheet">
+
+    <style>
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        p {
+            font-family: 'Almarai', sans-serif;
+        }
+    </style>
+
+
+
+
+    <style>
+        .page-title-area.style-four {
+            padding-top: 20px;
+            padding-bottom: 20px;
+        }
+
+        .default-btn.shop-color {
+            background: #f18a00;
+        }
+
+        .furniture-banner-content {
+            border-right: 5px solid #f18a00;
+        }
+
+        .single-features-box .icon,
+        .single-features-box .fas,
+        .single-features-box .fab {
+            line-height: 1;
+            display: block;
+            font-size: 50px;
+            margin-bottom: 22px;
+            -webkit-transition: var(--transition);
+            transition: var(--transition);
+        }
+
+        .single-features-box:hover .icon,
+        .single-features-box:hover .fas,
+        .single-features-box:hover .fab {
+            -webkit-transform: translateY(-20px);
+            transform: translateY(-20px);
+            color: var(--startupMainColor);
+        }
+
+
+
+        .noke-nav .navbar .navbar-nav .nav-item a {
+            color: #000000;
+        }
+
+        body {
+            color: #f18a00;
+        }
+
+        .furniture-banner-item {
+            padding-top: 395px;
+            padding-bottom: 200px;
+        }
+
+      /*   media only screen and (max-width: 767px) {
+            .furniture-banner-item
+
+        {
+            padding-top: 60px;
+            padding-bottom: 50px;
+        }
+
+        .single-team-member .content::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 0px;
+            background-color: var(--blackColor);
+            top: -40px;
+            z-index: -1;
+            -webkit-transition: var(--transition);
+            transition: var(--transition);
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        } */
+
+
+        .copyright-area p a {
+            color: #f18a00;
+        }
+
+        .single-contact-info-box.style-two .icon {
+            background-color: #f18a00;
+        }
+
+        a {
+            color: #f18a00;
+        }
+
+        .noke-nav .navbar .others-option .option-item .search-icon {
+            color: #f18a00;
+        }
+
+
+        .footer-area {
+            padding-top: 50px;
+            border-top: 2px solid #f18a00;
+        }
+
+
+        .copyright-area {
+            margin-top: 0px;
+        }
+
+        .copyright-area {
+            background-color: #53575a;
+        }
+
+            .copyright-area p {
+                color: #ffffff;
+            }
+
+        .noke-nav .navbar .navbar-nav .nav-item .dropdown-menu {
+            width: 280px;
+        }
+    </style>
+
+
+
+
+
+
+</head>
+<body>
+    <header>
+     @*    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+      
+
+
+        </nav>
+
+ *@
+
+        <!-- Start Navbar Area -->
+        <div class="navbar-area">
+
+            <div class="noke-responsive-nav">
+                <div class="container">
+                    <div class="noke-responsive-menu">
+                        <div class="logo">
+                            <a asp-area="" asp-controller="Home" asp-action="Index">
+                                <img src="~/uploadss/setting/1633531405about_logo.png" alt="logo"
+                                     width="60px">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="noke-nav">
+                <div class="container-fluid">
+                    <nav class="navbar navbar-expand-md navbar-light">
+                          <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                            <img src="~/uploadss/setting/1633531405about_logo.png"
+                                 alt="logo" width="100px">
+                        </a>
+
+                        <div class="collapse navbar-collapse mean-menu">
+                            <ul class="navbar-nav">
+
+                                <li class="nav-item ">
+                                    <a asp-area="" asp-controller="Home" asp-action="Index" class=" nav-link ">الرئيسية</a>
+                                </li>
+
+
+                                <li class="nav-item ">
+                                    <a asp-area="" asp-controller="Home" asp-action="about_us" class=" nav-link  ">من نحن </a>
+                                </li>
+
+@* 
+                                <li class="nav-item">
+                                    <a href="#" class="dropdown-toggle nav-link">خدماتنا</a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item">
+                                            <a href="ar/service/ldaa-o-lgz-y.html" class="nav-link">
+                                                الاستشـــارات القانونيــة
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="ar/service/service-no-2.html" class="nav-link">
+                                                الدعاوى المدنية
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="ar/service/service-no-1.html" class="nav-link">
+                                                منازعات التشييد والبناء
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="ar/service/ldaa-o-laam-ly.html" class="nav-link">
+                                                الدعاوى العمالية
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="ar/service/ldaa-o-ltg-ry.html" class="nav-link">
+                                                الدعاوى التجارية
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="ar/service/ldaa-o-lshraay.html" class="nav-link">
+                                                الدعاوى الشرعية
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="ar/service/service-no-3.html" class="nav-link">
+                                                صياغة العقود بكافة أنواعها باحترافية
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="ar/service/ldaa-o-lgz-y-2.html" class="nav-link">
+                                                الدعاوى الجزائية
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="ar/service/lmlky-lfkry-ohkok-ltalyf-o-lnshr.html" class="nav-link">
+                                                الملكية الفكرية وحقوق التأليف والنشر
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="ar/service/ldaa-o-l-d-ry.html" class="nav-link">
+                                                الدعاوى الإدارية
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="ar/service/lthkym.html" class="nav-link">
+                                                التحكيم
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="ar/service/los-t-o-ltsoy-t-lody.html" class="nav-link">
+                                                الوساطة والتسويات الودية
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a href="ar/service/tnfyth-lahk-m-lagnby.html" class="nav-link">
+                                                تنفيذ الأحكام الأجنبية
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+ *@
+
+
+@* 
+                                <li class="nav-item">
+                                    <a href="#" class="dropdown-toggle nav-link">مدونة الموقع</a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item">
+                                            <a href="ar/categorymk-l-t-k-nony.html" class="nav-link">
+                                                مقالات قانونية
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li> *@
+
+
+                                <li class="nav-item ">
+                                    <a  asp-area="" asp-controller="Home" asp-action="teams" class="nav-link">فريق العمل</a>
+                                </li>
+
+                                <li class="nav-item ">
+                                    <a asp-area="" asp-controller="Home" asp-action="BookConsultation" class="nav-link">طلب إستشارة قانونية</a>
+                                </li>
+
+
+
+
+
+                             @*    <li class="nav-item">
+                                    <a href="#" class="dropdown-toggle nav-link">المكتبة</a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item">
+                                            <a href="ar/library_show.html" class="nav-link"> المكتبة القانوينة </a>
+                                            <a href="ar/books_show.html" class="nav-link"> مؤلفات الدكتور </a>
+                                        </li>
+                                    </ul>
+                                </li> *@
+
+
+                            @*     <li class="nav-item">
+                                    <a href="#" class="dropdown-toggle nav-link">المعرض</a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item">
+                                            <a href="ar/gallery_show.html" class="nav-link"> معرض الصور </a>
+                                            <a href="ar/video_show.html" class="nav-link"> معرض الفيديو </a>
+                                        </li>
+                                    </ul>
+                                </li> *@
+
+
+                                <li class="nav-item">
+                                    <a asp-area="" asp-controller="Home" asp-action="ContactUS" class="dropdown-toggle nav-link">اتصل بنا</a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item">
+                                            <a asp-area="" asp-controller="Home" asp-action="ContactUS" class="nav-link">
+                                                فرع عمان
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a asp-area="" asp-controller="Home" asp-action="ContactUsIrbid" class="nav-link">
+                                                فرع إربد
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+
+
+
+
+
+
+
+                       @*          <li class="nav-item">
+                                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"
+                                       aria-expanded="false">
+                                        <strong class="mr-2 ml-2 my-auto">العربية </strong>
+                                    </a>
+                                    <ul class="dropdown-menu">
+                                        <li class="nav-item">
+                                            <a class="nav-link" rel="alternate" hreflang="en" href="en.html">
+                                                English
+                                            </a>
+                                            <a class="nav-link" rel="alternate" hreflang="ar" href="index.html">
+                                                العربية
+                                            </a>
+                                        </li>
+                                    </ul>
+
+
+                                </li> *@
+
+
+
+
+
+                            </ul>
+
+                            <div class="others-option d-flex align-items-center">
+
+                                <div class="option-item">
+
+                                    <div class="search-icon">
+
+                                        <a asp-area="" asp-controller="Auth" asp-action="Login" class=" nav-link fas fa-user-circle"></a>
+
+                                        
+
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+                                <div class="option-item">
+                                    <div class="social-links">
+
+
+
+
+
+                                        <span>
+                                            <a href="" target="_blank">
+                                                <i class="fab fa-facebook-f"></i>
+                                            </a>
+                                        </span>
+                                        <span><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></span>
+                                        <span>
+                                            <a href="" target="_blank">
+                                                <i class="fab fa-twitter"></i>
+                                            </a>
+                                        </span>
+                                        <span><a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </nav>
+                </div>
+            </div>
+
+            <div class="others-option-for-responsive">
+                <div class="container">
+                    <div class="dot-menu">
+                        <div class="inner">
+                            <div class="circle circle-one"></div>
+                            <div class="circle circle-two"></div>
+                            <div class="circle circle-three"></div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+                        <div class="option-inner">
+                            <div class="others-option">
+                                <div class="option-item">
+                                    <div class="search-icon">
+                                        <i class="fas fa-search"></i>
+                                    </div>
+                                </div>
+
+                                <div class="option-item">
+                                    <div class="social-links">
+                                        <span>
+                                            <a href="" target="_blank">
+                                                <i class="fab fa-facebook-f"></i>
+                                            </a>
+                                        </span>
+                                        <span><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></span>
+                                        <span>
+                                            <a href="" target="_blank">
+                                                <i class="fab fa-twitter"></i>
+                                            </a>
+                                        </span>
+                                        <span><a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Navbar Area -->
+        <!-- Search Overlay -->
+        <div class="search-overlay">
+            <div class="d-table">
+                <div class="d-table-cell">
+                    <div class="search-overlay-layer"></div>
+                    <div class="search-overlay-layer"></div>
+                    <div class="search-overlay-layer"></div>
+
+                    <div class="search-overlay-close">
+                        <span class="search-overlay-close-line"></span>
+                        <span class="search-overlay-close-line"></span>
+                    </div>
+
+                    <div class="search-overlay-form">
+                        <form>
+                            <input type="text" class="input-search" placeholder="Enter your keywords...">
+                            <button type="submit"><i class="fas fa-search"></i></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Search Overlay -->
+
+
+    </header>
+@*     <div class="container">
+ *@        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+@*     </div>
+ *@
+
+
+
+    <!-- Start Footer Area -->
+    <footer class="footer-area bg-faf7f2">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="single-footer-widget">
+                        <a href="index.html" class="logo bm-2">
+                            <img src="~/uploadss/setting/1633531405about_logo.png" alt="image" width="100px">
+                        </a>
+                        <h5>الدكتور محمد الشرمان للمحاماة والاستشارات القانونية </h5>
+                        <p>
+                        <p dir="rtl">
+                            <strong>
+                                <span style="font-size:18px">
+                                    إحدى المؤسسات الوطنية الرائدة في مجال
+                                    المحاماة&nbsp;
+                                </span>
+                            </strong>
+                        </p>
+
+                        <p dir="rtl">
+                            <strong>
+                                <span style="font-size:18px">
+                                    والاستشارات القانونية الأردن
+                                    عمان&nbsp;
+                                </span>
+                            </strong>
+                        </p>
+
+                        <p dir="rtl">
+                            <span style="font-size:18px">
+                                مؤسسة قانونية تقدم خدمات قانونية مميزة
+                                لعملائها&nbsp;
+                            </span>
+                        </p>
+
+                        <p dir="rtl"><span style="font-size:18px">(محامون ـ محكمون ـ مستشارون قانونيون)</span></p>
+
+                        <p dir="rtl">
+                            <span style="font-size:18px">
+                                تقديم خدماتنا القانونية: للأفراد، والمؤسسات والشركات
+                                التجارية، والوزارات والهيئات الحكومية، والهيئات الدبلوماسية، والمستثمرين من خلال فروع
+                                المكتب
+                            </span>
+                        </p>
+
+                        <p dir="rtl" style="text-align:justify">&nbsp;</p>
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="single-footer-widget">
+                        <h3>اتصل بنا</h3>
+
+                        <h6> فرع عمان </h6>
+                        <ul class="footer-contact">
+                            <li>
+                                <i class="fas fa-map-marker-alt"></i>عمان - دوار عبدون
+                            </li>
+                            <li>
+                                <i class="far fa-envelope"></i> <a href="mailto:info@drmohammad.com">info@drmohammad.com</a>
+                            </li>
+                            <li><i class="fas fa-phone-volume"></i> <a href="tel:+960777077970">0777077970</a></li>
+                        </ul>
+                        <hr>
+                        <h6> فرع إربد </h6>
+                        <ul class="footer-contact">
+                            <li><i class="fas fa-map-marker-alt"></i> إربد - دوار الثقافة</li>
+                            <li>
+                                <i class="far fa-envelope"></i> <a href="mailto:info@drmohammad.com">info@drmohammad.com</a>
+                            </li>
+                            <li><i class="fas fa-phone-volume"></i> <a href="tel:+962777077970">0777077970</a></li>
+                        </ul>
+                        <hr>
+
+                    </div>
+                </div>
+
+
+                <div class="col-lg-4 col-md-6 col-sm-6">
+                    <div class="single-footer-widget pl-4">
+                        <h3>روابط سريعة</h3>
+
+                        <ul class="info-links">
+                            <li><a asp-area="" asp-controller="Home" asp-action="Index">الرئيسية</a></li>
+                            <li><a asp-area="" asp-controller="Home" asp-action="about_us">من نحن</a></li>
+                            <li><a href="ar/contact_us/fraa-mskt.html">اتصل بنا / فرع عمان</a></li>
+                            <li><a href="ar/contact_us/fraa-nzo.html">اتصل بنا / فرع إربد</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="copyright-area">
+            <div class="container">
+                <p>
+                    جميع الحقوق محفوظة لدى <a href="#" target="_blank">
+                        الدكتور محمد الشرمان للمحاماة والاستشارات
+                        القانونية للمحاماة والاستشارات
+                        القانونية
+                    </a>
+                </p>
+            </div>
+        </div>
+    </footer>
+    <!-- End Footer Area -->
+
+
+    <div class="go-top"><i class="fas fa-chevron-up"></i></div>
+
+    <!-- Start QuickView Modal Area -->
+@*     <div class="modal fade productsQuickView" id="productsQuickView" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+                <div class="row align-items-center">
+                    <div class="col-lg-6 col-md-6">
+                        <div class="products-image">
+                            <img src="~/assets/img/products/products-img13.html" alt="image">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6">
+                        <div class="products-content">
+                            <h3><a href="products-details.html">Ergonomic Desk Sofa</a></h3>
+                            <div class="price">
+                                <span class="old-price">$99.00</span>
+                                <span class="new-price">$69.00</span>
+                            </div>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
+                                ut labore et dolore magna aliqua.
+                            </p>
+                            <div class="products-add-to-cart">
+                                <div class="quantities">
+                                    <span class="sub-title">Qty:</span>
+                                    <div class="input-counter">
+                                        <span class="minus-btn"><i class='fas fa-minus'></i></span>
+                                        <input type="text" value="1">
+                                        <span class="plus-btn"><i class='fas fa-plus'></i></span>
+                                    </div>
+                                </div>
+                                <button type="submit" class="default-btn shop-color">
+                                    Add to Cart <i class="fas fa-chevron-right"></i>
+                                </button>
+                            </div>
+                            <ul class="social-share">
+                                <li><span>Share:</span></li>
+                                <li><a href="#" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                                <li><a href="#" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                                <li><a href="#" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                                <li><a href="#" target="_blank"><i class="fab fa-linkedin-in"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> *@
+    <!-- End QuickView Modal Area -->
+    <!-- Links of JS files -->
+    <script src="~/frontend/assets/js/jquery.min.js"></script>
+    <script src="~/frontend/assets/js/bootstrap.bundle.min.js"></script>
+    <script src="~/frontend/assets/js/magnific-popup.min.js"></script>
+    <script src="~/frontend/assets/js/appear.min.js"></script>
+    <script src="~/frontend/assets/js/odometer.min.js"></script>
+    <script src="~/frontend/assets/js/parallax.min.js"></script>
+    <script src="~/frontend/assets/js/smooth-scroll.js"></script>
+    <script src="~/frontend/assets/js/rangeSlider.min.js"></script>
+    <script src="~/frontend/assets/js/showMoreItems.min.js"></script>
+    <script src="~/frontend/assets/js/mixitup.min.js"></script>
+    <script src="~/frontend/assets/js/meanmenu.min.js"></script>
+    <script src="~/frontend/assets/js/owl.carousel.min.js"></script>
+    <script src="~/frontend/assets/js/form-validator.min.js"></script>
+    <script src="~/frontend/assets/js/contact-form-script.js"></script>
+    <script src="~/frontend/assets/js/ajaxchimp.min.js"></script>
+    <script src="~/frontend/assets/js/main.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+@*     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+ *@    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+
+</body>
+</html>

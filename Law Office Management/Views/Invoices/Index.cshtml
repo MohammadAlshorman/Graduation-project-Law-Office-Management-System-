@@ -1,0 +1,50 @@
+﻿@model IEnumerable<Law_Office_Management.Models.Invoice>
+
+@{
+    ViewData["Title"] = "Invoices";
+}
+
+<h2>🧾 All Invoices</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">➕ Create Invoice</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Client</th>
+            <th>Amount</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Created At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.InvoiceId</td>
+                <td>@item.Client?.FullName</td>
+                <td>@item.Amount?.ToString("C")</td>
+                <td>@item.DueDate?.ToString("yyyy-MM-dd")</td>
+                <td>
+                    @if (item.IsPaid == true)
+                    {
+                        <span class="badge bg-success">Paid</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-warning text-dark">Unpaid</span>
+                    }
+                </td>
+                <td>@item.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.InvoiceId" class="btn btn-sm btn-info">View</a>
+                    <a asp-action="Edit" asp-route-id="@item.InvoiceId" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@item.InvoiceId" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

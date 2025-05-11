@@ -1,0 +1,32 @@
+﻿@model Law_Office_Management.Models.Lawyer
+
+@{
+    ViewData["Title"] = "👨‍⚖️ Lawyer Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Full Name</dt>
+            <dd class="col-sm-9">@Model.FullName</dd>
+
+            <dt class="col-sm-3">Specialty</dt>
+            <dd class="col-sm-9">@Model.Specialty</dd>
+
+            <dt class="col-sm-3">Phone</dt>
+            <dd class="col-sm-9">@Model.Phone</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Model.Email</dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">@((Model.IsActive == true) ? "✅ Active" : "❌ Inactive")</dd>
+        </dl>
+    </div>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.LawyerId" class="btn btn-warning">✏️ Edit</a>
+<a asp-action="Index" class="btn btn-secondary">↩ Back</a>

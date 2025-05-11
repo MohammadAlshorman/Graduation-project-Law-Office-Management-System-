@@ -1,0 +1,28 @@
+﻿@model Law_Office_Management.Models.AttendanceRecord
+@{
+    ViewData["Title"] = "Delete Attendance Record";
+}
+
+<h2>🗑 Delete Attendance Record</h2>
+
+<h4>Are you sure you want to delete this record?</h4>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">Lawyer</dt>
+    <dd class="col-sm-9">@Model.Lawyer?.FullName</dd>
+
+    <dt class="col-sm-3">Check In</dt>
+    <dd class="col-sm-9">@Model.CheckInTime?.ToString("yyyy-MM-dd HH:mm")</dd>
+
+    <dt class="col-sm-3">Check Out</dt>
+    <dd class="col-sm-9">
+        @(Model.CheckOutTime.HasValue ? Model.CheckOutTime?.ToString("yyyy-MM-dd HH:mm") : "—")
+    </dd>
+</dl>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="AttendanceId" />
+    <button type="submit" class="btn btn-danger">Confirm Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

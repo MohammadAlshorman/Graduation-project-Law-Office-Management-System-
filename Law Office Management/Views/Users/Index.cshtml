@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Law_Office_Management.Models.User>
+@{
+    ViewData["Title"] = "Manage Users";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-4">👥 User Management</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger">@TempData["Error"]</div>
+}
+
+<a asp-action="Create" class="btn btn-success mb-3"><i class="fas fa-user-plus me-1"></i> Add New User</a>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th style="width:180px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Model)
+        {
+            <tr>
+                <td>@user.UserId</td>
+                <td>@user.Username</td>
+                <td>@user.Role</td>
+                <td>
+                    <span class="badge bg-@(user.IsActive == true ? "success" : "secondary")">
+                        @(user.IsActive == true ? "Active" : "Inactive")
+                    </span>
+                </td>
+                <td>
+                    @if (user.UserId != 1)
+                    {
+                        <a asp-action="ToggleStatus" asp-route-id="@user.UserId" class="btn btn-sm btn-outline-warning">
+                            @(user.IsActive == true ? "Deactivate" : "Activate")
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-sm btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@user.UserId" class="btn btn-sm btn-danger">Delete</a>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Protected</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

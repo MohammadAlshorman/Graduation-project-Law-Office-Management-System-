@@ -1,0 +1,37 @@
+﻿@model Law_Office_Management.Models.Document
+
+@{
+    ViewData["Title"] = "Document Details";
+}
+
+<h2>📄 Document Details</h2>
+
+<dl class="row">
+    <dt class="col-sm-3">File Name</dt>
+    <dd class="col-sm-9">@Model.FileName</dd>
+
+    <dt class="col-sm-3">File Type</dt>
+    <dd class="col-sm-9">@Model.FileType</dd>
+
+    <dt class="col-sm-3">Document Type</dt>
+    <dd class="col-sm-9">@Model.DocumentType</dd>
+
+    <dt class="col-sm-3">Case</dt>
+    <dd class="col-sm-9">@Model.Case?.Title</dd>
+
+    <dt class="col-sm-3">Uploaded By</dt>
+    <dd class="col-sm-9">@Model.UploadedByNavigation?.Username</dd>
+
+    <dt class="col-sm-3">Upload Date</dt>
+    <dd class="col-sm-9">@Model.UploadDate?.ToString("yyyy-MM-dd HH:mm")</dd>
+
+    <dt class="col-sm-3">Privacy</dt>
+    <dd class="col-sm-9">@((Model.IsPrivate == true) ? "Private" : "Public")</dd>
+
+    <dt class="col-sm-3">Download</dt>
+    <dd class="col-sm-9">
+        <a asp-action="Download" asp-route-id="@Model.DocumentId" class="btn btn-sm btn-info">⬇️ Download</a>
+    </dd>
+</dl>
+
+<a asp-action="Index" class="btn btn-secondary">Back</a>

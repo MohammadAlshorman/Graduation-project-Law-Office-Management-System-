@@ -1,0 +1,30 @@
+﻿@model Law_Office_Management.Models.Invoice
+
+@{
+    ViewData["Title"] = "Invoice Details";
+}
+
+<h2>📋 Invoice Details</h2>
+
+<dl class="row">
+    <dt class="col-sm-3">Invoice ID</dt>
+    <dd class="col-sm-9">@Model.InvoiceId</dd>
+
+    <dt class="col-sm-3">Client</dt>
+    <dd class="col-sm-9">@Model.Client?.FullName</dd>
+
+    <dt class="col-sm-3">Amount</dt>
+    <dd class="col-sm-9">@Model.Amount?.ToString("C")</dd>
+
+    <dt class="col-sm-3">Due Date</dt>
+    <dd class="col-sm-9">@Model.DueDate?.ToString("yyyy-MM-dd")</dd>
+
+    <dt class="col-sm-3">Status</dt>
+    <dd class="col-sm-9">@((Model.IsPaid == true) ? "Paid" : "Unpaid")</dd>
+
+    <dt class="col-sm-3">Created At</dt>
+    <dd class="col-sm-9">@Model.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.InvoiceId" class="btn btn-warning">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back</a>

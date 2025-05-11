@@ -1,0 +1,53 @@
+﻿@model Law_Office_Management.Models.Case
+@{
+    ViewData["Title"] = "Edit Case";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var clients = ViewData["Clients"] as IEnumerable<Law_Office_Management.Models.Client>;
+    var lawyers = ViewData["Lawyers"] as IEnumerable<Law_Office_Management.Models.Lawyer>;
+}
+
+<h2 class="mb-4">✏️ Edit Case</h2>
+
+<form asp-action="Edit" method="post" class="shadow-sm p-4 bg-white rounded">
+    <input type="hidden" asp-for="CaseId" />
+
+    <div class="mb-3">
+        <label asp-for="Title" class="form-label">Title</label>
+        <input asp-for="Title" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description" class="form-label">Description</label>
+        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Status" class="form-label">Status</label>
+        <input asp-for="Status" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="ClientId" class="form-label">Client</label>
+        <select asp-for="ClientId" class="form-select" asp-items="@(new SelectList(clients, "ClientId", "FullName", Model.ClientId))"></select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LawyerId" class="form-label">Lawyer</label>
+        <select asp-for="LawyerId" class="form-select" asp-items="@(new SelectList(lawyers, "LawyerId", "FullName", Model.LawyerId))"></select>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="StartDate" class="form-label">Start Date</label>
+            <input asp-for="StartDate" class="form-control" type="date" />
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="EndDate" class="form-label">End Date</label>
+            <input asp-for="EndDate" class="form-control" type="date" />
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</form>

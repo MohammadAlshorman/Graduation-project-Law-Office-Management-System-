@@ -1,0 +1,17 @@
+﻿@model Law_Office_Management.Models.Case
+@{
+    ViewData["Title"] = "Delete Case";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="text-danger mb-4">🗑️ Delete Case</h2>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete the case "<strong>@Model.Title</strong>"?
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="CaseId" />
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

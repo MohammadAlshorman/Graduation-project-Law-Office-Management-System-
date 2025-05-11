@@ -1,0 +1,68 @@
+﻿@model Law_Office_Management.Models.Case
+@using System.Linq
+
+@{
+    ViewData["Title"] = "Case Details";
+}
+
+<h2>📄 Case Details</h2>
+
+<div class="mb-4">
+    <h4>Client Info</h4>
+    <dl class="row">
+        <dt class="col-sm-3">Client Name</dt>
+        <dd class="col-sm-9">@Model.Client?.FullName</dd>
+
+        <dt class="col-sm-3">Lawyer</dt>
+        <dd class="col-sm-9">@Model.Lawyer?.FullName</dd>
+
+        <dt class="col-sm-3">Case Title</dt>
+        <dd class="col-sm-9">@Model.Title</dd>
+
+        <dt class="col-sm-3">Case Description</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
+    </dl>
+</div>
+
+<hr />
+
+<h4 class="mt-5">📎 Attached Documents</h4>
+
+@if (Model.Documents != null && Model.Documents.Any())
+{
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>File Name</th>
+                <th>File Type</th>
+                <th>Document Type</th>
+                <th>Uploaded At</th>
+                <th>Uploaded By</th>
+                <th>Private</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var doc in Model.Documents)
+            {
+                <tr>
+                    <td>@doc.FileName</td>
+                    <td>@doc.FileType</td>
+                    <td>@doc.DocumentType</td>
+                    <td>@doc.UploadDate?.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@doc.UploadedByNavigation?.Username</td>
+                    <td>@(doc.IsPrivate == true ? "🔒" : "Public")</td>
+                    <td>
+                        <a asp-controller="Documents" asp-action="Download" asp-route-id="@doc.DocumentId" class="btn btn-sm btn-info">⬇️ Download</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-muted">No documents attached to this case.</p>
+}
+
+<a asp-action="Index" class="btn btn-secondary mt-4">🔙 Back to List</a>

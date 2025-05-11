@@ -1,0 +1,26 @@
+﻿@model Law_Office_Management.Models.User
+@{
+    ViewData["Title"] = "Delete User";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-4 text-danger">🗑️ Delete User</h2>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete user <strong>@Model.Username</strong>?
+</div>
+
+<div class="mb-3">
+    <strong>Role:</strong> @Model.Role<br />
+    <strong>Status:</strong>
+    <span class="badge bg-@(Model.IsActive == true ? "success" : "secondary")">
+        @(Model.IsActive == true ? "Active" : "Inactive")
+    </span>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="UserId" />
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+

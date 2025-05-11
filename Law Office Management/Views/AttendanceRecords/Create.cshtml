@@ -1,0 +1,52 @@
+﻿@model Law_Office_Management.Models.AttendanceRecord
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Add Attendance Record";
+    var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
+    var isLawyer = role == "Lawyer";
+}
+
+<h2>🕒 Add Attendance</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group mb-3">
+        <label>Lawyer</label>
+        @if (isLawyer)
+        {
+            <!-- Lawyer sees their name only, but the field is still required for POST -->
+            <select asp-for="LawyerId" class="form-control" disabled>
+                @foreach (var lawyer in (List<Law_Office_Management.Models.Lawyer>)ViewData["LawyerList"])
+                {
+                    <option value="@lawyer.LawyerId" selected>@lawyer.FullName</option>
+                }
+            </select>
+            <input type="hidden" asp-for="LawyerId" />
+        }
+        else
+        {
+            <select asp-for="LawyerId" class="form-control" required>
+                <option value="">-- Select Lawyer --</option>
+                @foreach (var lawyer in (List<Law_Office_Management.Models.Lawyer>)ViewData["LawyerList"])
+                {
+                    <option value="@lawyer.LawyerId">@lawyer.FullName</option>
+                }
+            </select>
+        }
+        <span asp-validation-for="LawyerId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mb-3">
+        <label asp-for="Notes" class="form-label">Notes</label>
+        <textarea asp-for="Notes" class="form-control"></textarea>
+        <span asp-validation-for="Notes" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-success">✅ Check In</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

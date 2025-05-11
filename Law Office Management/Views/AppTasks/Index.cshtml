@@ -1,0 +1,57 @@
+﻿@model IEnumerable<Law_Office_Management.Models.AppTask>
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    ViewData["Title"] = "Tasks";
+    var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
+    var userId = HttpContextAccessor.HttpContext?.Session.GetInt32("UserId");
+    bool isAdmin = role == "Admin";
+    bool isLawyer = role == "Lawyer";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+@if (isAdmin)
+{
+    <a asp-action="Create" class="btn btn-success mb-3">➕ Add New Task</a>
+}
+
+<table class="table table-bordered">
+    <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Lawyer</th>
+            <th>Due Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            // ✅ المحامي يرى فقط المهام الخاصة به
+            if (isLawyer && item.Lawyer?.UserId != userId)
+            {
+                continue;
+            }
+
+            <tr>
+                <td>@item.Title</td>
+                <td>@item.Lawyer?.FullName</td>
+                <td>@item.DueDate?.ToString("yyyy-MM-dd")</td>
+                <td>@(item.IsCompleted == true ? "Completed" : "In Progress")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.TaskId" class="btn btn-info btn-sm">👁 View</a>
+                    <form asp-action="MarkCompleted" asp-route-id="@item.TaskId" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-success btn-sm">✅ Completed</button>
+                    </form>
+                    @if (isAdmin)
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.TaskId" class="btn btn-warning btn-sm">✏️ Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.TaskId" class="btn btn-danger btn-sm">🗑 Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

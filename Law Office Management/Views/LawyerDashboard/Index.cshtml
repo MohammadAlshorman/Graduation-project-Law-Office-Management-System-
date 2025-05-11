@@ -1,0 +1,42 @@
+﻿@model Law_Office_Management.Models.LawyerDashboardViewModel
+@{
+    ViewData["Title"] = "Lawyer Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-4">👨‍⚖️ Lawyer Dashboard</h2>
+
+<div class="row g-4">
+    <div class="col-md-3"><div class="card bg-primary text-white shadow"><div class="card-body"><h5>My Cases</h5><p class="display-6">@Model.MyCasesCount</p></div></div></div>
+    <div class="col-md-3"><div class="card bg-warning text-dark shadow"><div class="card-body"><h5>Pending Tasks</h5><p class="display-6">@Model.TasksPending</p></div></div></div>
+    <div class="col-md-3"><div class="card bg-success text-white shadow"><div class="card-body"><h5>Completed Tasks</h5><p class="display-6">@Model.TasksCompleted</p></div></div></div>
+    <div class="col-md-3"><div class="card bg-info text-white shadow"><div class="card-body"><h5>Upcoming Sessions</h5><p class="display-6">@Model.UpcomingSessions</p></div></div></div>
+    <div class="col-md-3"><div class="card bg-dark text-white shadow mt-3"><div class="card-body"><h5>Active Contracts</h5><p class="display-6">@Model.ActiveContracts</p></div></div></div>
+</div>
+
+<hr class="my-4" />
+
+<h4>📝 Recent Tasks</h4>
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Due Date</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model.RecentTasks ?? new List<Law_Office_Management.Models.AppTask>())
+        {
+            <tr>
+                <td>@task.Title</td>
+                <td>@(task.DueDate?.ToString("yyyy-MM-dd") ?? "-")</td>
+                <td>
+                    <span class="badge bg-@(task.IsCompleted == true ? "success" : "warning")">
+                        @(task.IsCompleted == true ? "Completed" : "Pending")
+                    </span>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

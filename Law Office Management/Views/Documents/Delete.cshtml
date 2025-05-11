@@ -1,0 +1,30 @@
+﻿@model Law_Office_Management.Models.Document
+
+@{
+    ViewData["Title"] = "Delete Document";
+}
+
+<h2>🗑️ Delete Document</h2>
+
+<h4>Are you sure you want to delete this document?</h4>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-3">File Name</dt>
+    <dd class="col-sm-9">@Model.FileName</dd>
+
+    <dt class="col-sm-3">Document Type</dt>
+    <dd class="col-sm-9">@Model.DocumentType</dd>
+
+    <dt class="col-sm-3">Case</dt>
+    <dd class="col-sm-9">@Model.Case?.Title</dd>
+
+    <dt class="col-sm-3">Uploaded By</dt>
+    <dd class="col-sm-9">@Model.UploadedByNavigation?.Username</dd>
+</dl>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="DocumentId" />
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

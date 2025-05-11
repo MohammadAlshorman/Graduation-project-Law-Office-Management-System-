@@ -1,0 +1,30 @@
+﻿@model Law_Office_Management.Models.Verdict
+@{
+    ViewData["Title"] = "Delete Verdict";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="text-danger">🗑️ Delete Verdict</h2>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete this verdict?
+</div>
+
+<div class="card p-3 mb-3">
+    <dl class="row">
+        <dt class="col-sm-3">Case</dt>
+        <dd class="col-sm-9">@Model.Case?.Title</dd>
+
+        <dt class="col-sm-3">Summary</dt>
+        <dd class="col-sm-9">@Model.Summary</dd>
+
+        <dt class="col-sm-3">Verdict Date</dt>
+        <dd class="col-sm-9">@Model.VerdictDate?.ToString("yyyy-MM-dd")</dd>
+    </dl>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="VerdictId" />
+    <button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i> Confirm Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

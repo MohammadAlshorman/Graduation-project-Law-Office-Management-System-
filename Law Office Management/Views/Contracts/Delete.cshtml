@@ -1,0 +1,45 @@
+﻿@model Law_Office_Management.Models.Contract
+@{
+    ViewData["Title"] = "Delete Contract";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="text-danger mb-4">🗑️ Delete Contract</h2>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete the contract "<strong>@Model.Title</strong>"?
+</div>
+
+<div class="card p-4 mb-3">
+    <dl class="row">
+        <dt class="col-sm-3">Client</dt>
+        <dd class="col-sm-9">@Model.Client?.FullName</dd>
+
+        <dt class="col-sm-3">Lawyer</dt>
+        <dd class="col-sm-9">@Model.Lawyer?.FullName</dd>
+
+        <dt class="col-sm-3">Start Date</dt>
+        <dd class="col-sm-9">@Model.StartDate?.ToString("yyyy-MM-dd")</dd>
+
+        <dt class="col-sm-3">End Date</dt>
+        <dd class="col-sm-9">@Model.EndDate?.ToString("yyyy-MM-dd")</dd>
+
+        <dt class="col-sm-3">File</dt>
+        <dd class="col-sm-9">
+            @if (!string.IsNullOrEmpty(Model.FilePath))
+            {
+                <a href="@Model.FilePath" target="_blank">📄 View File</a>
+            }
+            else
+            {
+                <span class="text-muted">No file</span>
+            }
+        </dd>
+    </dl>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="ContractId" />
+    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

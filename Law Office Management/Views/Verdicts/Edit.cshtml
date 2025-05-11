@@ -1,0 +1,32 @@
+﻿@model Law_Office_Management.Models.Verdict
+@{
+    ViewData["Title"] = "Edit Verdict";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var cases = ViewData["Cases"] as List<Law_Office_Management.Models.Case>;
+}
+
+<h2 class="mb-4">✏️ Edit Verdict</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="VerdictId" />
+
+    <div class="mb-3">
+        <label asp-for="CaseId" class="form-label">Case</label>
+        <select asp-for="CaseId" class="form-select" asp-items="@(new SelectList(cases, "CaseId", "Title", Model.CaseId))">
+            <option value="">-- Select Case --</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Summary" class="form-label">Summary</label>
+        <textarea asp-for="Summary" class="form-control" rows="4"></textarea>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="VerdictDate" class="form-label">Verdict Date</label>
+        <input asp-for="VerdictDate" type="date" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

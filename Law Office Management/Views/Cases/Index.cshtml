@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Law_Office_Management.Models.Case>
+@{
+    ViewData["Title"] = "Cases";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h2 class="mb-4">📁 All Cases</h2>
+<a asp-action="Create" class="btn btn-primary mb-3">➕ Add New Case</a>
+
+<table class="table table-bordered table-striped shadow-sm">
+    <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Status</th>
+            <th>Client</th>
+            <th>Lawyer</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model)
+        {
+            <tr>
+                <td>@c.Title</td>
+                <td>@c.Status</td>
+                <td>@c.Client?.FullName</td>
+                <td>@c.Lawyer?.FullName</td>
+                <td>@c.StartDate?.ToString("yyyy-MM-dd")</td>
+                <td>@c.EndDate?.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@c.CaseId" class="btn btn-sm btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@c.CaseId" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@c.CaseId" class="btn btn-sm btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
