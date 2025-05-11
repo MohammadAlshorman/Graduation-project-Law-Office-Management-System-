@@ -37,9 +37,10 @@ A complete web-based solution for managing the daily operations of a law office,
 
 ## 👨‍💻 Developed By
 
-**Mohammad Alshorman**  [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?logo=linkedin)](https://www.linkedin.com/in/mohammadalshorman/)
-Full Stack Web Developer
-📧 mhmdshhadhalshrman95@gmail.com  
+**Mohammad Alshorman** 
+ [![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue?logo=linkedin)](https://www.linkedin.com/in/mohammadalshorman/)<br>
+Full Stack Web Developer<br>
+📧 mhmdshhadhalshrman95@gmail.com  <br>
 📞 +962777077970 <br>
 
 ---
