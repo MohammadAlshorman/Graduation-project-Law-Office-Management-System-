@@ -3,26 +3,125 @@
 
 @{
     ViewData["Title"] = "Case Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>📄 Case Details</h2>
+<div class="container-fluid px-4">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-folder-open text-primary"></i> Case Details
+        </h2>
+    </div>
 
-<div class="mb-4">
-    <h4>Client Info</h4>
-    <dl class="row">
-        <dt class="col-sm-3">Client Name</dt>
-        <dd class="col-sm-9">@Model.Client?.FullName</dd>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="text-primary mb-3">Basic Information</h5>
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            <i class="fas fa-file-alt me-2"></i>Title
+                        </dt>
+                        <dd class="col-sm-8">@Model.Title</dd>
 
-        <dt class="col-sm-3">Lawyer</dt>
-        <dd class="col-sm-9">@Model.Lawyer?.FullName</dd>
+                        <dt class="col-sm-4">
+                            <i class="fas fa-align-left me-2"></i>Description
+                        </dt>
+                        <dd class="col-sm-8">@Model.Description</dd>
 
-        <dt class="col-sm-3">Case Title</dt>
-        <dd class="col-sm-9">@Model.Title</dd>
+                        <dt class="col-sm-4">
+                            <i class="fas fa-tasks me-2"></i>Status
+                        </dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-@(Model.Status == "Active" ? "success" : Model.Status == "Closed" ? "danger" : "warning")">
+                                @Model.Status
+                            </span>
+                        </dd>
+                    </dl>
+                </div>
 
-        <dt class="col-sm-3">Case Description</dt>
-        <dd class="col-sm-9">@Model.Description</dd>
-    </dl>
+                <div class="col-md-6">
+                    <h5 class="text-primary mb-3">Case Details</h5>
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            <i class="fas fa-user me-2"></i>Client
+                        </dt>
+                        <dd class="col-sm-8">@Model.Client?.FullName</dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-user-tie me-2"></i>Lawyer
+                        </dt>
+                        <dd class="col-sm-8">@Model.Lawyer?.FullName</dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-calendar-alt me-2"></i>Start Date
+                        </dt>
+                        <dd class="col-sm-8">
+                            @(Model.StartDate.HasValue ? Model.StartDate.Value.ToShortDateString() : "Not set")
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-calendar-check me-2"></i>End Date
+                        </dt>
+                        <dd class="col-sm-8">
+                            @(Model.EndDate.HasValue ? Model.EndDate.Value.ToShortDateString() : "Not set")
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <hr />
+            <div class="d-flex gap-2">
+                <a asp-action="Edit" asp-route-id="@Model.CaseId" class="btn btn-primary">
+                    <i class="fas fa-edit me-2"></i>Edit
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    dt {
+        font-weight: 600;
+        color: #6c757d;
+    }
+
+    dd {
+        margin-bottom: 0.5rem;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+        font-weight: 500;
+    }
+</style>
 
 <hr />
 
@@ -49,7 +148,7 @@
                     <td>@doc.FileName</td>
                     <td>@doc.FileType</td>
                     <td>@doc.DocumentType</td>
-                    <td>@doc.UploadDate?.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@(doc.UploadDate?.ToString("yyyy-MM-dd HH:mm"))</td>
                     <td>@doc.UploadedByNavigation?.Username</td>
                     <td>@(doc.IsPrivate == true ? "🔒" : "Public")</td>
                     <td>
@@ -64,5 +163,3 @@ else
 {
     <p class="text-muted">No documents attached to this case.</p>
 }
-
-<a asp-action="Index" class="btn btn-secondary mt-4">🔙 Back to List</a>

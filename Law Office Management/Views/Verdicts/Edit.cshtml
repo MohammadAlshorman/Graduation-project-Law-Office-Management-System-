@@ -5,28 +5,102 @@
     var cases = ViewData["Cases"] as List<Law_Office_Management.Models.Case>;
 }
 
-<h2 class="mb-4">✏️ Edit Verdict</h2>
-
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="VerdictId" />
-
-    <div class="mb-3">
-        <label asp-for="CaseId" class="form-label">Case</label>
-        <select asp-for="CaseId" class="form-select" asp-items="@(new SelectList(cases, "CaseId", "Title", Model.CaseId))">
-            <option value="">-- Select Case --</option>
-        </select>
+<div class="container-fluid px-4">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-edit text-primary"></i> Edit Verdict
+        </h2>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Summary" class="form-label">Summary</label>
-        <textarea asp-for="Summary" class="form-control" rows="4"></textarea>
-    </div>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="VerdictId" />
 
-    <div class="mb-3">
-        <label asp-for="VerdictDate" class="form-label">Verdict Date</label>
-        <input asp-for="VerdictDate" type="date" class="form-control" />
-    </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="text-primary mb-3">Case Information</h5>
+                        <div class="mb-3">
+                            <label asp-for="CaseId" class="form-label">
+                                <i class="fas fa-folder text-muted me-2"></i>Case
+                            </label>
+                            <select asp-for="CaseId" class="form-select" asp-items="@(new SelectList(cases, "CaseId", "Title", Model.CaseId))" required>
+                                <option value="">-- Select Case --</option>
+                            </select>
+                            <span asp-validation-for="CaseId" class="text-danger"></span>
+                        </div>
 
-    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Update</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+                        <div class="mb-3">
+                            <label asp-for="VerdictDate" class="form-label">
+                                <i class="fas fa-calendar-alt text-muted me-2"></i>Verdict Date
+                            </label>
+                            <input asp-for="VerdictDate" type="date" class="form-control" required />
+                            <span asp-validation-for="VerdictDate" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h5 class="text-primary mb-3">Verdict Details</h5>
+                        <div class="mb-3">
+                            <label asp-for="Summary" class="form-label">
+                                <i class="fas fa-file-alt text-muted me-2"></i>Summary
+                            </label>
+                            <textarea asp-for="Summary" class="form-control" rows="6" required></textarea>
+                            <span asp-validation-for="Summary" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Changes
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.2rem rgba(241, 138, 0, 0.25);
+    }
+</style>

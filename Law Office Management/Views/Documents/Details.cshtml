@@ -4,34 +4,126 @@
     ViewData["Title"] = "Document Details";
 }
 
-<h2>📄 Document Details</h2>
+<div class="page-title-area">
+    <div class="container">
+        <h1 class="text-center mb-4">📄 Document Details</h1>
+    </div>
+</div>
 
-<dl class="row">
-    <dt class="col-sm-3">File Name</dt>
-    <dd class="col-sm-9">@Model.FileName</dd>
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <div class="document-header mb-4">
+                        <div class="d-flex align-items-center justify-content-between">
+                            <h3 class="mb-0">@Model.FileName</h3>
+                            <a asp-action="Download" asp-route-id="@Model.DocumentId" class="btn btn-primary" style="background-color: #f18a00; border-color: #f18a00;">
+                                <i class="fas fa-download me-2"></i>Download
+                            </a>
+                        </div>
+                    </div>
 
-    <dt class="col-sm-3">File Type</dt>
-    <dd class="col-sm-9">@Model.FileType</dd>
+                    <div class="document-details">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="detail-item mb-3">
+                                    <label class="text-muted d-block">File Name</label>
+                                    <strong>@Model.FileName</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-item mb-3">
+                                    <label class="text-muted d-block">File Type</label>
+                                    <strong>@Model.FileType</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-item mb-3">
+                                    <label class="text-muted d-block">Document Type</label>
+                                    <strong>@Model.DocumentType</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-item mb-3">
+                                    <label class="text-muted d-block">Case</label>
+                                    <strong>@Model.Case?.Title</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-item mb-3">
+                                    <label class="text-muted d-block">Uploaded By</label>
+                                    <strong>@Model.UploadedByNavigation?.Username</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-item mb-3">
+                                    <label class="text-muted d-block">Upload Date</label>
+                                    <strong>@(Model.UploadDate?.ToString("MMM dd, yyyy"))</strong>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-item mb-3">
+                                    <label class="text-muted d-block">Privacy</label>
+                                    <span class="badge bg-@(Model.IsPrivate == true ? "danger" : "success")">
+                                        @(Model.IsPrivate == true ? "Private" : "Public")
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
-    <dt class="col-sm-3">Document Type</dt>
-    <dd class="col-sm-9">@Model.DocumentType</dd>
+                    <div class="mt-4 d-flex gap-2 justify-content-end">
+                        <a asp-action="Index" class="btn btn-secondary px-4">Back to List</a>
+                        <a asp-action="Edit" asp-route-id="@Model.DocumentId" class="btn btn-primary px-4">Edit</a>
+                        <a asp-action="Download" asp-route-id="@Model.DocumentId" class="btn btn-success px-4">
+                            <i class="fas fa-download me-2"></i>Download
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <dt class="col-sm-3">Case</dt>
-    <dd class="col-sm-9">@Model.Case?.Title</dd>
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
 
-    <dt class="col-sm-3">Uploaded By</dt>
-    <dd class="col-sm-9">@Model.UploadedByNavigation?.Username</dd>
+    .document-header h3 {
+        color: #333;
+        font-size: 1.5rem;
+    }
 
-    <dt class="col-sm-3">Upload Date</dt>
-    <dd class="col-sm-9">@Model.UploadDate?.ToString("yyyy-MM-dd HH:mm")</dd>
+    .detail-item label {
+        font-size: 0.9rem;
+        margin-bottom: 0.25rem;
+    }
 
-    <dt class="col-sm-3">Privacy</dt>
-    <dd class="col-sm-9">@((Model.IsPrivate == true) ? "Private" : "Public")</dd>
+    .detail-item strong {
+        color: #333;
+        font-size: 1.1rem;
+    }
 
-    <dt class="col-sm-3">Download</dt>
-    <dd class="col-sm-9">
-        <a asp-action="Download" asp-route-id="@Model.DocumentId" class="btn btn-sm btn-info">⬇️ Download</a>
-    </dd>
-</dl>
+    .badge {
+        padding: 0.5em 1em;
+        font-size: 0.9rem;
+    }
 
-<a asp-action="Index" class="btn btn-secondary">Back</a>
+    .btn-primary:hover {
+        background-color: #d67a00 !important;
+        border-color: #d67a00 !important;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        border-color: #1e7e34;
+    }
+</style>

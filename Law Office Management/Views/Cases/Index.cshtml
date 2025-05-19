@@ -2,39 +2,209 @@
 @{
     ViewData["Title"] = "Cases";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    // Statistics
+    var totalCases = Model.Count();
+    var activeCases = Model.Count(c => c.Status?.ToLower() == "active");
+    var closedCases = Model.Count(c => c.Status?.ToLower() == "closed");
 }
 
-<h2 class="mb-4">📁 All Cases</h2>
-<a asp-action="Create" class="btn btn-primary mb-3">➕ Add New Case</a>
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-gavel text-primary"></i> All Cases
+        </h2>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Add New Case
+        </a>
+    </div>
 
-<table class="table table-bordered table-striped shadow-sm">
-    <thead class="table-dark">
-        <tr>
-            <th>Title</th>
-            <th>Status</th>
-            <th>Client</th>
-            <th>Lawyer</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var c in Model)
-        {
-            <tr>
-                <td>@c.Title</td>
-                <td>@c.Status</td>
-                <td>@c.Client?.FullName</td>
-                <td>@c.Lawyer?.FullName</td>
-                <td>@c.StartDate?.ToString("yyyy-MM-dd")</td>
-                <td>@c.EndDate?.ToString("yyyy-MM-dd")</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@c.CaseId" class="btn btn-sm btn-info">Details</a>
-                    <a asp-action="Edit" asp-route-id="@c.CaseId" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@c.CaseId" class="btn btn-sm btn-danger">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Total Cases</h6>
+                            <h2 class="mb-0">@totalCases</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-warning text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Active Cases</h6>
+                            <h2 class="mb-0">@activeCases</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Closed Cases</h6>
+                            <h2 class="mb-0">@closedCases</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="bg-light">
+                            <th>Title</th>
+                            <th>Status</th>
+                            <th>Client</th>
+                            <th>Lawyer</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var c in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-file-alt text-primary me-2"></i>
+                                        @c.Title
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (c.Status?.ToLower() == "active")
+                                    {
+                                        <span class="badge bg-warning">Active</span>
+                                    }
+                                    else if (c.Status?.ToLower() == "closed")
+                                    {
+                                        <span class="badge bg-success">Closed</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">@c.Status</span>
+                                    }
+                                </td>
+                                <td>
+                                    <i class="fas fa-user text-muted me-2"></i>
+                                    @c.Client?.FullName
+                                </td>
+                                <td>
+                                    <i class="fas fa-user-tie text-muted me-2"></i>
+                                    @c.Lawyer?.FullName
+                                </td>
+                                <td>
+                                    <i class="fas fa-calendar-alt text-muted me-2"></i>
+                                    @c.StartDate?.ToString("yyyy-MM-dd")
+                                </td>
+                                <td>
+                                    <i class="fas fa-calendar-check text-muted me-2"></i>
+                                    @c.EndDate?.ToString("yyyy-MM-dd")
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-action="Details" asp-route-id="@c.CaseId" class="btn btn-info btn-sm">
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@c.CaseId" class="btn btn-warning btn-sm">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@c.CaseId" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .bg-primary {
+        background-color: var(--primary-color) !important;
+    }
+
+    .table th {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .card .fs-1 {
+        opacity: 0.8;
+    }
+
+    .card h6 {
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .card h2 {
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+    }
+</style>

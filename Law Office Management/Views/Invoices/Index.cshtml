@@ -1,50 +1,232 @@
 ﻿@model IEnumerable<Law_Office_Management.Models.Invoice>
-
 @{
     ViewData["Title"] = "Invoices";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    // Statistics
+    var today = DateOnly.FromDateTime(DateTime.Now);
+    var totalInvoices = Model.Count();
+    var totalAmount = Model.Sum(i => i.Amount ?? 0);
+    var paidInvoices = Model.Count(i => i.IsPaid == true);
+    var unpaidInvoices = Model.Count(i => i.IsPaid == false);
+    var overdueInvoices = Model.Count(i => i.IsPaid == false && i.DueDate.HasValue && i.DueDate.Value < today);
 }
 
-<h2>🧾 All Invoices</h2>
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-file-invoice-dollar text-primary"></i> Invoices Management
+        </h2>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Add New Invoice
+        </a>
+    </div>
 
-<a asp-action="Create" class="btn btn-success mb-3">➕ Create Invoice</a>
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Total Invoices</h6>
+                            <h2 class="mb-0">@totalInvoices</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-file-invoice"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Total Amount</h6>
+                            <h2 class="mb-0">@totalAmount.ToString("C")</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-dollar-sign"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Paid Invoices</h6>
+                            <h2 class="mb-0">@paidInvoices</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Overdue</h6>
+                            <h2 class="mb-0">@overdueInvoices</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>#</th>
-            <th>Client</th>
-            <th>Amount</th>
-            <th>Due Date</th>
-            <th>Status</th>
-            <th>Created At</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.InvoiceId</td>
-                <td>@item.Client?.FullName</td>
-                <td>@item.Amount?.ToString("C")</td>
-                <td>@item.DueDate?.ToString("yyyy-MM-dd")</td>
-                <td>
-                    @if (item.IsPaid == true)
-                    {
-                        <span class="badge bg-success">Paid</span>
-                    }
-                    else
-                    {
-                        <span class="badge bg-warning text-dark">Unpaid</span>
-                    }
-                </td>
-                <td>@item.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.InvoiceId" class="btn btn-sm btn-info">View</a>
-                    <a asp-action="Edit" asp-route-id="@item.InvoiceId" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@item.InvoiceId" class="btn btn-sm btn-danger">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="bg-light">
+                            <th>#</th>
+                            <th>Client</th>
+                            <th>Amount</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th>Created At</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-file-invoice text-primary me-2"></i>
+                                        @item.InvoiceId
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-user text-muted me-2"></i>
+                                        @item.Client?.FullName
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark">
+                                        <i class="fas fa-dollar-sign me-1"></i>
+                                        @item.Amount?.ToString("C")
+                                    </span>
+                                </td>
+                                <td>
+                                    @{
+                                        var isOverdue = item.IsPaid == false && item.DueDate.HasValue && item.DueDate.Value < today;
+                                    }
+                                    <span class="badge bg-@(isOverdue ? "danger" : "light text-dark")">
+                                        <i class="fas fa-calendar me-1"></i>
+                                        @item.DueDate?.ToString("yyyy-MM-dd")
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-@(item.IsPaid == true ? "success" : isOverdue ? "danger" : "warning text-dark")">
+                                        <i class="fas fa-@(item.IsPaid == true ? "check-circle" : isOverdue ? "exclamation-circle" : "clock") me-1"></i>
+                                        @(item.IsPaid == true ? "Paid" : isOverdue ? "Overdue" : "Unpaid")
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark">
+                                        <i class="fas fa-clock me-1"></i>
+                                        @item.CreatedAt?.ToString("yyyy-MM-dd HH:mm")
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-action="Details" asp-route-id="@item.InvoiceId" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.InvoiceId" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.InvoiceId" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .bg-primary {
+        background-color: var(--primary-color) !important;
+    }
+
+    .table th {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .card .fs-1 {
+        opacity: 0.8;
+    }
+
+    .card h6 {
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .card h2 {
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+        font-weight: 500;
+    }
+</style>

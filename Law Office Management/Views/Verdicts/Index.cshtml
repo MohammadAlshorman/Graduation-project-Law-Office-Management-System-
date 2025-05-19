@@ -2,43 +2,223 @@
 @{
     ViewData["Title"] = "Verdicts";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    // Statistics
+    var totalVerdicts = Model.Count();
+    var thisMonthVerdicts = Model.Count(v => v.VerdictDate?.Month == DateTime.Now.Month);
+    var thisYearVerdicts = Model.Count(v => v.VerdictDate?.Year == DateTime.Now.Year);
+    var latestVerdict = Model.OrderByDescending(v => v.VerdictDate).FirstOrDefault();
 }
 
-<h2 class="mb-4">📜 Verdicts Management</h2>
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-gavel text-primary"></i> Verdicts Management
+        </h2>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Add New Verdict
+        </a>
+    </div>
 
-<a class="btn btn-primary mb-3" asp-action="Create"><i class="fas fa-plus"></i> Add Verdict</a>
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>@TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 
-@if (TempData["Success"] != null)
-{
-    <div class="alert alert-success">@TempData["Success"]</div>
-}
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Total Verdicts</h6>
+                            <h2 class="mb-0">@totalVerdicts</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-gavel"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">This Month</h6>
+                            <h2 class="mb-0">@thisMonthVerdicts</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">This Year</h6>
+                            <h2 class="mb-0">@thisYearVerdicts</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-calendar"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Latest Verdict</h6>
+                            <h2 class="mb-0">@(latestVerdict?.VerdictDate?.ToString("dd/MM") ?? "-")</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>Case Title</th>
-            <th>Summary</th>
-            <th>Verdict Date</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var v in Model)
-        {
-            <tr>
-                <td>@v.Case?.Title</td>
-                <td>@(v.Summary?.Length > 60 ? v.Summary.Substring(0, 60) + "..." : v.Summary)</td>
-                <td>@v.VerdictDate?.ToString("yyyy-MM-dd")</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@v.VerdictId" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                    <a asp-action="Edit" asp-route-id="@v.VerdictId" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i></a>
-                    <a asp-action="Delete" asp-route-id="@v.VerdictId" class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="bg-light">
+                            <th>Case Title</th>
+                            <th>Summary</th>
+                            <th>Verdict Date</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var v in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-folder text-primary me-2"></i>
+                                        @v.Case?.Title
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="text-truncate" style="max-width: 300px;">
+                                        @(v.Summary?.Length > 60 ? v.Summary.Substring(0, 60) + "..." : v.Summary)
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark">
+                                        <i class="fas fa-calendar-alt me-1"></i>
+                                        @v.VerdictDate?.ToString("yyyy-MM-dd")
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-action="Details" asp-route-id="@v.VerdictId" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@v.VerdictId" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@v.VerdictId" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .bg-primary {
+        background-color: var(--primary-color) !important;
+    }
+
+    .table th {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .card .fs-1 {
+        opacity: 0.8;
+    }
+
+    .card h6 {
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .card h2 {
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+        font-weight: 500;
+    }
+
+    .alert {
+        border-radius: 10px;
+    }
+</style>

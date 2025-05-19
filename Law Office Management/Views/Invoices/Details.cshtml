@@ -1,30 +1,136 @@
 ﻿@model Law_Office_Management.Models.Invoice
-
 @{
     ViewData["Title"] = "Invoice Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var today = DateOnly.FromDateTime(DateTime.Now);
+    var isOverdue = Model.IsPaid == false && Model.DueDate.HasValue && Model.DueDate.Value < today;
 }
 
-<h2>📋 Invoice Details</h2>
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-file-invoice-dollar text-primary"></i> Invoice Details
+        </h2>
+        <div class="d-flex gap-2">
+            <a asp-action="Edit" asp-route-id="@Model.InvoiceId" class="btn btn-primary">
+                <i class="fas fa-edit me-2"></i>Edit
+            </a>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back
+            </a>
+        </div>
+    </div>
 
-<dl class="row">
-    <dt class="col-sm-3">Invoice ID</dt>
-    <dd class="col-sm-9">@Model.InvoiceId</dd>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="text-primary mb-4">Invoice Information</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">
+                                <i class="fas fa-hashtag me-2"></i>Invoice ID
+                            </label>
+                            <p class="mb-0 fw-bold">@Model.InvoiceId</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">
+                                <i class="fas fa-user me-2"></i>Client
+                            </label>
+                            <p class="mb-0 fw-bold">@Model.Client?.FullName</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">
+                                <i class="fas fa-dollar-sign me-2"></i>Amount
+                            </label>
+                            <p class="mb-0 fw-bold">@Model.Amount?.ToString("C")</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">
+                                <i class="fas fa-calendar me-2"></i>Due Date
+                            </label>
+                            <p class="mb-0 fw-bold">@Model.DueDate?.ToString("yyyy-MM-dd")</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">
+                                <i class="fas fa-clock me-2"></i>Status
+                            </label>
+                            <p class="mb-0">
+                                <span class="badge bg-@(Model.IsPaid == true ? "success" : isOverdue ? "danger" : "warning text-dark")">
+                                    <i class="fas fa-@(Model.IsPaid == true ? "check-circle" : isOverdue ? "exclamation-circle" : "clock") me-1"></i>
+                                    @(Model.IsPaid == true ? "Paid" : isOverdue ? "Overdue" : "Unpaid")
+                                </span>
+                            </p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">
+                                <i class="fas fa-calendar-plus me-2"></i>Created At
+                            </label>
+                            <p class="mb-0 fw-bold">@Model.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <dt class="col-sm-3">Client</dt>
-    <dd class="col-sm-9">@Model.Client?.FullName</dd>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="text-primary mb-4">Quick Actions</h5>
+                    <div class="d-grid gap-2">
+                        <a asp-action="Edit" asp-route-id="@Model.InvoiceId" class="btn btn-primary">
+                            <i class="fas fa-edit me-2"></i>Edit Invoice
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@Model.InvoiceId" class="btn btn-danger">
+                            <i class="fas fa-trash me-2"></i>Delete Invoice
+                        </a>
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to List
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <dt class="col-sm-3">Amount</dt>
-    <dd class="col-sm-9">@Model.Amount?.ToString("C")</dd>
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
 
-    <dt class="col-sm-3">Due Date</dt>
-    <dd class="col-sm-9">@Model.DueDate?.ToString("yyyy-MM-dd")</dd>
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
 
-    <dt class="col-sm-3">Status</dt>
-    <dd class="col-sm-9">@((Model.IsPaid == true) ? "Paid" : "Unpaid")</dd>
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
 
-    <dt class="col-sm-3">Created At</dt>
-    <dd class="col-sm-9">@Model.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</dd>
-</dl>
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
 
-<a asp-action="Edit" asp-route-id="@Model.InvoiceId" class="btn btn-warning">Edit</a>
-<a asp-action="Index" class="btn btn-secondary">Back</a>
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .form-label {
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .fw-bold {
+        font-weight: 600 !important;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+        font-weight: 500;
+    }
+</style>

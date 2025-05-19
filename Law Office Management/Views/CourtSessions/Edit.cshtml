@@ -5,31 +5,128 @@
     var cases = ViewData["Cases"] as IEnumerable<Law_Office_Management.Models.Case>;
 }
 
-<h2 class="mb-4">✏️ Edit Court Session</h2>
-
-<form asp-action="Edit" method="post" class="shadow-sm p-4 bg-white rounded">
-    <input type="hidden" asp-for="SessionId" />
-
-    <div class="mb-3">
-        <label asp-for="CaseId" class="form-label">Case</label>
-        <select asp-for="CaseId" class="form-select" asp-items="@(new SelectList(cases, "CaseId", "Title", Model.CaseId))"></select>
+<div class="page-title-area">
+    <div class="container">
+        <h1 class="text-center mb-4">✏️ Edit Court Session</h1>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label asp-for="SessionDate" class="form-label">Session Date</label>
-        <input asp-for="SessionDate" class="form-control" type="datetime-local" />
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4"></div>
+                        <input type="hidden" asp-for="SessionId" />
+
+                        <div class="mb-3">
+                            <label asp-for="CaseId" class="form-label">Case</label>
+                            <select asp-for="CaseId" class="form-select" asp-items="@(new SelectList(cases, "CaseId", "Title", Model.CaseId))">
+                                <option value="">-- Select Case --</option>
+                            </select>
+                            <span asp-validation-for="CaseId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="SessionDate" class="form-label">Session Date & Time</label>
+                            <input asp-for="SessionDate" class="form-control" type="datetime-local" />
+                            <span asp-validation-for="SessionDate" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Location" class="form-label">Court Location</label>
+                            <input asp-for="Location" class="form-control" placeholder="Enter court location" />
+                            <span asp-validation-for="Location" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Notes" class="form-label">Session Notes</label>
+                            <textarea asp-for="Notes" class="form-control" rows="4" placeholder="Enter any additional notes about the session"></textarea>
+                            <span asp-validation-for="Notes" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4" style="background-color: #f18a00; border-color: #f18a00;">
+                                <i class="fas fa-save me-2"></i>Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label asp-for="Location" class="form-label">Location</label>
-        <input asp-for="Location" class="form-control" />
-    </div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 
-    <div class="mb-3">
-        <label asp-for="Notes" class="form-label">Notes</label>
-        <textarea asp-for="Notes" class="form-control" rows="4"></textarea>
-    </div>
+<style>
+    .page-title-area {
+        background: linear-gradient(145deg, #f18a00, #ff9e2c);
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+    }
 
-    <button type="submit" class="btn btn-success">Update</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+    .page-title-area h1 {
+        color: white;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .form-label {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control, .form-select {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 0.75rem;
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #f18a00;
+        box-shadow: 0 0 0 0.2rem rgba(241, 138, 0, 0.25);
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+
+    .text-danger {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .btn-primary {
+        transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #d67a00 !important;
+        border-color: #d67a00 !important;
+        transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+</style>

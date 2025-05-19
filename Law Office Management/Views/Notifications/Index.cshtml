@@ -3,63 +3,244 @@
 
 @{
     ViewData["Title"] = "Notifications";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
     var userId = HttpContextAccessor.HttpContext?.Session.GetInt32("UserId");
     bool isAdmin = role == "Admin";
+
+    // Statistics
+    var totalNotifications = Model.Count();
+    var unreadNotifications = Model.Count(n => !(n.IsRead ?? false));
+    var readNotifications = Model.Count(n => n.IsRead ?? false);
 }
 
-<h2>🔔 Notifications</h2>
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-}
-
-@if (isAdmin)
-{
-    <a asp-action="Create" class="btn btn-success mb-3">➕ Create New Notification</a>
-}
-
-<table class="table table-bordered table-hover">
-    <thead class="table-dark">
-        <tr>
-            <th>Title</th>
-            <th>Message</th>
-            <th>User</th>
-            <th>Type</th>
-            <th>Case</th>
-            <th>Created At</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var noti in Model)
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-bell text-primary"></i> Notifications
+        </h2>
+        @if (isAdmin)
         {
-            var isRead = noti.IsRead ?? false;
-
-            <tr class="@(isRead ? "" : "table-warning")">
-                <td>@noti.Title</td>
-                <td>@noti.Message</td>
-                <td>@noti.User?.Username</td>
-                <td>@noti.Type</td>
-                <td>@noti.RelatedCase?.Title</td>
-                <td>@noti.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>@(isRead ? "✅ Read" : "🕒 Unread")</td>
-                <td>
-                    @if (!isRead)
-                    {
-                        <a asp-action="MarkAsRead" asp-route-id="@noti.NotificationId" class="btn btn-sm btn-outline-success me-1">
-                            👁️ Mark as Read
-                        </a>
-                    }
-
-                    @if (isAdmin)
-                    {
-                        <a asp-action="Delete" asp-route-id="@noti.NotificationId" class="btn btn-sm btn-danger">🗑️ Delete</a>
-                    }
-                </td>
-            </tr>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Create New Notification
+            </a>
         }
-    </tbody>
-</table>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Total Notifications</h6>
+                            <h2 class="mb-0">@totalNotifications</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-warning text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Unread Notifications</h6>
+                            <h2 class="mb-0">@unreadNotifications</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Read Notifications</h6>
+                            <h2 class="mb-0">@readNotifications</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-envelope-open"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>@TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="bg-light">
+                            <th>Title</th>
+                            <th>Message</th>
+                            <th>User</th>
+                            <th>Type</th>
+                            <th>Case</th>
+                            <th>Created At</th>
+                            <th>Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var noti in Model)
+                        {
+                            var isRead = noti.IsRead ?? false;
+                            <tr class="@(isRead ? "" : "table-warning")">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-bell text-primary me-2"></i>
+                                        @noti.Title
+                                    </div>
+                                </td>
+                                <td>@noti.Message</td>
+                                <td>
+                                    <i class="fas fa-user text-muted me-2"></i>
+                                    @noti.User?.Username
+                                </td>
+                                <td>
+                                    <span class="badge bg-info">@noti.Type</span>
+                                </td>
+                                <td>
+                                    @if (noti.RelatedCase != null)
+                                    {
+                                        <a href="@Url.Action("Details", "Cases", new { id = noti.RelatedCaseId })" class="text-decoration-none">
+                                            <i class="fas fa-file-alt text-muted me-2"></i>
+                                            @noti.RelatedCase.Title
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">-</span>
+                                    }
+                                </td>
+                                <td>
+                                    <i class="fas fa-clock text-muted me-2"></i>
+                                    @noti.CreatedAt?.ToString("yyyy-MM-dd HH:mm")
+                                </td>
+                                <td>
+                                    @if (isRead)
+                                    {
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check me-1"></i>Read
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">
+                                            <i class="fas fa-clock me-1"></i>Unread
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        @if (!isRead)
+                                        {
+                                            <a asp-action="MarkAsRead" asp-route-id="@noti.NotificationId" class="btn btn-sm btn-success">
+                                                <i class="fas fa-check me-1"></i>Mark as Read
+                                            </a>
+                                        }
+
+                                        @if (isAdmin)
+                                        {
+                                            <a asp-action="Delete" asp-route-id="@noti.NotificationId" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .bg-primary {
+        background-color: var(--primary-color) !important;
+    }
+
+    .table th {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .card .fs-1 {
+        opacity: 0.8;
+    }
+
+    .card h6 {
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .card h2 {
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+        font-weight: 500;
+    }
+
+    .alert {
+        border-radius: 10px;
+    }
+</style>

@@ -1,32 +1,122 @@
 ﻿@model Law_Office_Management.Models.Lawyer
 
 @{
-    ViewData["Title"] = "👨‍⚖️ Lawyer Details";
+    ViewData["Title"] = "Lawyer Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container-fluid px-4">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-user-tie text-primary"></i> Lawyer Details
+        </h2>
+    </div>
 
-<div class="card mb-4">
-    <div class="card-body">
-        <dl class="row">
-            <dt class="col-sm-3">Full Name</dt>
-            <dd class="col-sm-9">@Model.FullName</dd>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="text-primary mb-3">Personal Information</h5>
+                            <dl class="row">
+                                <dt class="col-sm-4">Full Name</dt>
+                                <dd class="col-sm-8">
+                                    <i class="fas fa-user text-muted me-2"></i>
+                                    @Model.FullName
+                                </dd>
 
-            <dt class="col-sm-3">Specialty</dt>
-            <dd class="col-sm-9">@Model.Specialty</dd>
+                                <dt class="col-sm-4">Specialty</dt>
+                                <dd class="col-sm-8">
+                                    <i class="fas fa-briefcase text-muted me-2"></i>
+                                    @Model.Specialty
+                                </dd>
 
-            <dt class="col-sm-3">Phone</dt>
-            <dd class="col-sm-9">@Model.Phone</dd>
+                                <dt class="col-sm-4">Phone</dt>
+                                <dd class="col-sm-8">
+                                    <i class="fas fa-phone text-muted me-2"></i>
+                                    @Model.Phone
+                                </dd>
 
-            <dt class="col-sm-3">Email</dt>
-            <dd class="col-sm-9">@Model.Email</dd>
+                                <dt class="col-sm-4">Email</dt>
+                                <dd class="col-sm-8">
+                                    <i class="fas fa-envelope text-muted me-2"></i>
+                                    @Model.Email
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="text-primary mb-3">Account Status</h5>
+                            <dl class="row">
+                                <dt class="col-sm-4">Status</dt>
+                                <dd class="col-sm-8">
+                                    @if (Model.IsActive == true)
+                                    {
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check-circle me-1"></i>Active
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">
+                                            <i class="fas fa-times-circle me-1"></i>Inactive
+                                        </span>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <dt class="col-sm-3">Status</dt>
-            <dd class="col-sm-9">@((Model.IsActive == true) ? "✅ Active" : "❌ Inactive")</dd>
-        </dl>
+    <div class="d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.LawyerId" class="btn btn-primary">
+            <i class="fas fa-edit me-2"></i>Edit
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back
+        </a>
     </div>
 </div>
 
-<a asp-action="Edit" asp-route-id="@Model.LawyerId" class="btn btn-warning">✏️ Edit</a>
-<a asp-action="Index" class="btn btn-secondary">↩ Back</a>
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    dt {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    dd {
+        margin-bottom: 1rem;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+        font-weight: 500;
+    }
+</style>

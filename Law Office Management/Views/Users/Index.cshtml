@@ -2,54 +2,227 @@
 @{
     ViewData["Title"] = "Manage Users";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    // Statistics
+    var totalUsers = Model.Count();
+    var activeUsers = Model.Count(u => u.IsActive == true);
+    var inactiveUsers = Model.Count(u => u.IsActive != true);
+    var adminUsers = Model.Count(u => u.Role == "Admin");
+    var lawyerUsers = Model.Count(u => u.Role == "Lawyer");
 }
 
-<h2 class="mb-4">👥 User Management</h2>
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-users text-primary"></i> User Management
+        </h2>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-user-plus me-2"></i>Add New User
+        </a>
+    </div>
 
-@if (TempData["Error"] != null)
-{
-    <div class="alert alert-danger">@TempData["Error"]</div>
-}
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fas fa-exclamation-circle me-2"></i>@TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
 
-<a asp-action="Create" class="btn btn-success mb-3"><i class="fas fa-user-plus me-1"></i> Add New User</a>
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Total Users</h6>
+                            <h2 class="mb-0">@totalUsers</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-users"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Active Users</h6>
+                            <h2 class="mb-0">@activeUsers</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Admins</h6>
+                            <h2 class="mb-0">@adminUsers</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Lawyers</h6>
+                            <h2 class="mb-0">@lawyerUsers</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-<table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>#</th>
-            <th>Username</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th style="width:180px;">Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@user.UserId</td>
-                <td>@user.Username</td>
-                <td>@user.Role</td>
-                <td>
-                    <span class="badge bg-@(user.IsActive == true ? "success" : "secondary")">
-                        @(user.IsActive == true ? "Active" : "Inactive")
-                    </span>
-                </td>
-                <td>
-                    @if (user.UserId != 1)
-                    {
-                        <a asp-action="ToggleStatus" asp-route-id="@user.UserId" class="btn btn-sm btn-outline-warning">
-                            @(user.IsActive == true ? "Deactivate" : "Activate")
-                        </a>
-                        <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-sm btn-primary">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@user.UserId" class="btn btn-sm btn-danger">Delete</a>
-                    }
-                    else
-                    {
-                        <span class="text-muted">Protected</span>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="bg-light">
+                            <th>Username</th>
+                            <th>Role</th>
+                            <th>Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-user text-primary me-2"></i>
+                                        @user.Username
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-@(user.Role == "Admin" ? "warning" : "info")">
+                                        <i class="fas fa-@(user.Role == "Admin" ? "user-shield" : "user-tie") me-1"></i>
+                                        @user.Role
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-@(user.IsActive == true ? "success" : "secondary")">
+                                        <i class="fas fa-@(user.IsActive == true ? "check-circle" : "times-circle") me-1"></i>
+                                        @(user.IsActive == true ? "Active" : "Inactive")
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        @if (user.UserId != 1)
+                                        {
+                                            <a asp-action="ToggleStatus" asp-route-id="@user.UserId" class="btn btn-sm btn-@(user.IsActive == true ? "warning" : "success")">
+                                                <i class="fas fa-@(user.IsActive == true ? "ban" : "check")"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@user.UserId" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">
+                                                <i class="fas fa-shield-alt me-1"></i>Protected
+                                            </span>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .bg-primary {
+        background-color: var(--primary-color) !important;
+    }
+
+    .table th {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .card .fs-1 {
+        opacity: 0.8;
+    }
+
+    .card h6 {
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .card h2 {
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+        font-weight: 500;
+    }
+
+    .alert {
+        border-radius: 10px;
+    }
+</style>

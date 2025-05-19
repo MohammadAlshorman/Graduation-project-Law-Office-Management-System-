@@ -3,55 +3,249 @@
 
 @{
     ViewData["Title"] = "Tasks";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
     var userId = HttpContextAccessor.HttpContext?.Session.GetInt32("UserId");
     bool isAdmin = role == "Admin";
     bool isLawyer = role == "Lawyer";
+
+    // Statistics
+    var totalTasks = Model.Count();
+    var completedTasks = Model.Count(t => t.IsCompleted == true);
+    var pendingTasks = Model.Count(t => t.IsCompleted != true);
+    var overdueTasks = Model.Count(t => t.IsCompleted != true && t.DueDate < DateTime.Today);
 }
 
-<h2>@ViewData["Title"]</h2>
-
-@if (isAdmin)
-{
-    <a asp-action="Create" class="btn btn-success mb-3">➕ Add New Task</a>
-}
-
-<table class="table table-bordered">
-    <thead class="table-dark">
-        <tr>
-            <th>Title</th>
-            <th>Lawyer</th>
-            <th>Due Date</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-tasks text-primary"></i> Tasks
+        </h2>
+        @if (isAdmin)
         {
-            // ✅ المحامي يرى فقط المهام الخاصة به
-            if (isLawyer && item.Lawyer?.UserId != userId)
-            {
-                continue;
-            }
-
-            <tr>
-                <td>@item.Title</td>
-                <td>@item.Lawyer?.FullName</td>
-                <td>@item.DueDate?.ToString("yyyy-MM-dd")</td>
-                <td>@(item.IsCompleted == true ? "Completed" : "In Progress")</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@item.TaskId" class="btn btn-info btn-sm">👁 View</a>
-                    <form asp-action="MarkCompleted" asp-route-id="@item.TaskId" method="post" style="display:inline;">
-                        <button type="submit" class="btn btn-success btn-sm">✅ Completed</button>
-                    </form>
-                    @if (isAdmin)
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.TaskId" class="btn btn-warning btn-sm">✏️ Edit</a>
-                        <a asp-action="Delete" asp-route-id="@item.TaskId" class="btn btn-danger btn-sm">🗑 Delete</a>
-                    }
-                </td>
-            </tr>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Add New Task
+            </a>
         }
-    </tbody>
-</table>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Total Tasks</h6>
+                            <h2 class="mb-0">@totalTasks</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Completed</h6>
+                            <h2 class="mb-0">@completedTasks</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Pending</h6>
+                            <h2 class="mb-0">@pendingTasks</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Overdue</h6>
+                            <h2 class="mb-0">@overdueTasks</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-exclamation-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="bg-light">
+                            <th>Title</th>
+                            <th>Description</th>
+                            <th>Lawyer</th>
+                            <th>Due Date</th>
+                            <th>Status</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            if (isLawyer && item.Lawyer?.UserId != userId)
+                            {
+                                continue;
+                            }
+
+                            var isOverdue = item.IsCompleted != true && item.DueDate < DateTime.Today;
+                            <tr class="@(isOverdue ? "table-danger" : item.IsCompleted == true ? "table-success" : "")">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-tasks text-primary me-2"></i>
+                                        @item.Title
+                                    </div>
+                                </td>
+                                <td>@item.Description</td>
+                                <td>
+                                    <i class="fas fa-user text-muted me-2"></i>
+                                    @item.Lawyer?.FullName
+                                </td>
+                                <td>
+                                    <i class="fas fa-calendar text-muted me-2"></i>
+                                    @item.DueDate?.ToString("yyyy-MM-dd")
+                                </td>
+                                <td>
+                                    @if (item.IsCompleted == true)
+                                    {
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-check me-1"></i>Completed
+                                        </span>
+                                    }
+                                    else if (isOverdue)
+                                    {
+                                        <span class="badge bg-danger">
+                                            <i class="fas fa-exclamation-circle me-1"></i>Overdue
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">
+                                            <i class="fas fa-clock me-1"></i>In Progress
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-action="Details" asp-route-id="@item.TaskId" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        @if (item.IsCompleted != true)
+                                        {
+                                            <form asp-action="MarkCompleted" asp-route-id="@item.TaskId" method="post" style="display:inline;">
+                                                <button type="submit" class="btn btn-sm btn-success">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                        @if (isAdmin)
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@item.TaskId" class="btn btn-sm btn-warning">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.TaskId" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .bg-primary {
+        background-color: var(--primary-color) !important;
+    }
+
+    .table th {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .card .fs-1 {
+        opacity: 0.8;
+    }
+
+    .card h6 {
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .card h2 {
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+        font-weight: 500;
+    }
+</style>

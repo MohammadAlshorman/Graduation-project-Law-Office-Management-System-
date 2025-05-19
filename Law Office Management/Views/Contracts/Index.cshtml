@@ -2,48 +2,247 @@
 @{
     ViewData["Title"] = "Contracts";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    // Statistics
+    var today = DateOnly.FromDateTime(DateTime.Now);
+    var oneMonthLater = today.AddMonths(1);
+    var totalContracts = Model.Count();
+    var activeContracts = Model.Count(c => c.EndDate.HasValue && c.EndDate.Value >= today);
+    var expiringContracts = Model.Count(c => c.EndDate.HasValue && c.EndDate.Value <= oneMonthLater && c.EndDate.Value >= today);
+    var expiredContracts = Model.Count(c => c.EndDate.HasValue && c.EndDate.Value < today);
 }
 
-<h2 class="mb-4">📑 Contracts</h2>
-<a asp-action="Create" class="btn btn-primary mb-3">➕ Add Contract</a>
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-file-contract text-primary"></i> Contracts Management
+        </h2>
+        <a asp-action="Create" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Add New Contract
+        </a>
+    </div>
 
-<table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>Title</th>
-            <th>Client</th>
-            <th>Lawyer</th>
-            <th>Start</th>
-            <th>End</th>
-            <th>File</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var contract in Model)
-        {
-            <tr>
-                <td>@contract.Title</td>
-                <td>@contract.Client?.FullName</td>
-                <td>@contract.Lawyer?.FullName</td>
-                <td>@contract.StartDate?.ToString("yyyy-MM-dd")</td>
-                <td>@contract.EndDate?.ToString("yyyy-MM-dd")</td>
-                <td>
-                    @if (!string.IsNullOrEmpty(contract.FilePath))
-                    {
-                        <a href="@contract.FilePath" target="_blank">📥 View File</a>
-                    }
-                    else
-                    {
-                        <span class="text-muted">No File</span>
-                    }
-                </td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@contract.ContractId" class="btn btn-sm btn-info">Details</a>
-                    <a asp-action="Edit" asp-route-id="@contract.ContractId" class="btn btn-sm btn-warning">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@contract.ContractId" class="btn btn-sm btn-danger">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Total Contracts</h6>
+                            <h2 class="mb-0">@totalContracts</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-file-contract"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Active Contracts</h6>
+                            <h2 class="mb-0">@activeContracts</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Expiring Soon</h6>
+                            <h2 class="mb-0">@expiringContracts</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Expired</h6>
+                            <h2 class="mb-0">@expiredContracts</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-times-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="bg-light">
+                            <th>Title</th>
+                            <th>Client</th>
+                            <th>Lawyer</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th>File</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var contract in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-file-alt text-primary me-2"></i>
+                                        @contract.Title
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-user text-muted me-2"></i>
+                                        @contract.Client?.FullName
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-user-tie text-muted me-2"></i>
+                                        @contract.Lawyer?.FullName
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge bg-light text-dark">
+                                        <i class="fas fa-calendar-plus me-1"></i>
+                                        @contract.StartDate?.ToString("yyyy-MM-dd")
+                                    </span>
+                                </td>
+                                <td>
+                                    @{
+                                        var isExpired = contract.EndDate.HasValue && contract.EndDate.Value < today;
+                                        var isExpiringSoon = contract.EndDate.HasValue && contract.EndDate.Value <= oneMonthLater && contract.EndDate.Value >= today;
+                                    }
+                                    <span class="badge bg-@(isExpired ? "danger" : isExpiringSoon ? "warning" : "success")">
+                                        <i class="fas fa-calendar-check me-1"></i>
+                                        @contract.EndDate?.ToString("yyyy-MM-dd")
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge bg-@(isExpired ? "danger" : isExpiringSoon ? "warning" : "success")">
+                                        <i class="fas fa-@(isExpired ? "times-circle" : isExpiringSoon ? "clock" : "check-circle") me-1"></i>
+                                        @(isExpired ? "Expired" : isExpiringSoon ? "Expiring Soon" : "Active")
+                                    </span>
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(contract.FilePath))
+                                    {
+                                        <a href="@contract.FilePath" target="_blank" class="btn btn-sm btn-info">
+                                            <i class="fas fa-file-pdf"></i>
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">
+                                            <i class="fas fa-times me-1"></i>No File
+                                        </span>
+                                    }
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-action="Details" asp-route-id="@contract.ContractId" class="btn btn-sm btn-info">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@contract.ContractId" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@contract.ContractId" class="btn btn-sm btn-danger">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .bg-primary {
+        background-color: var(--primary-color) !important;
+    }
+
+    .table th {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .card .fs-1 {
+        opacity: 0.8;
+    }
+
+    .card h6 {
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .card h2 {
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+        font-weight: 500;
+    }
+</style>

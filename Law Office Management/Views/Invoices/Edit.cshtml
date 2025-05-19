@@ -1,45 +1,158 @@
 ﻿@model Law_Office_Management.Models.Invoice
-
 @{
     ViewData["Title"] = "Edit Invoice";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var today = DateOnly.FromDateTime(DateTime.Now);
+    var isOverdue = Model.IsPaid == false && Model.DueDate.HasValue && Model.DueDate.Value < today;
 }
 
-<h2>✏️ Edit Invoice</h2>
-
-<form asp-action="Edit">
-    <input type="hidden" asp-for="InvoiceId" />
-
-    <div class="form-group mb-3">
-        <label>Client</label>
-        <select asp-for="ClientId" class="form-control" required>
-            <option value="">Select Client</option>
-            @foreach (var client in (List<Client>)ViewData["ClientList"])
-            {
-                <option value="@client.ClientId" selected="@(client.ClientId == Model.ClientId)">
-                    @client.FullName
-                </option>
-            }
-        </select>
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-edit text-primary"></i> Edit Invoice
+        </h2>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back to List
+        </a>
     </div>
 
-    <div class="form-group mb-3">
-        <label>Amount</label>
-        <input asp-for="Amount" class="form-control" type="number" step="0.01" required />
-    </div>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="InvoiceId" />
 
-    <div class="form-group mb-3">
-        <label>Due Date</label>
-        <input asp-for="DueDate" class="form-control" type="date" required />
-    </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-user me-2"></i>Client
+                                </label>
+                                <select asp-for="ClientId" class="form-select" required>
+                                    <option value="">Select Client</option>
+                                    @foreach (var client in (List<Client>)ViewData["ClientList"])
+                                    {
+                                        <option value="@client.ClientId" selected="@(client.ClientId == Model.ClientId)">
+                                            @client.FullName
+                                        </option>
+                                    }
+                                </select>
+                                <span asp-validation-for="ClientId" class="text-danger"></span>
+                            </div>
 
-    <div class="form-group mb-3">
-        <label>Status</label>
-        <select asp-for="IsPaid" class="form-control">
-            <option value="false">Unpaid</option>
-            <option value="true">Paid</option>
-        </select>
-    </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-dollar-sign me-2"></i>Amount
+                                </label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input asp-for="Amount" class="form-control" type="number" step="0.01" required />
+                                </div>
+                                <span asp-validation-for="Amount" class="text-danger"></span>
+                            </div>
 
-    <button type="submit" class="btn btn-primary">Update</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-calendar me-2"></i>Due Date
+                                </label>
+                                <input asp-for="DueDate" class="form-control" type="date" required />
+                                <span asp-validation-for="DueDate" class="text-danger"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">
+                                    <i class="fas fa-clock me-2"></i>Status
+                                </label>
+                                <select asp-for="IsPaid" class="form-select">
+                                    <option value="false">Unpaid</option>
+                                    <option value="true">Paid</option>
+                                </select>
+                                <span asp-validation-for="IsPaid" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <hr />
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save me-2"></i>Update Invoice
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="text-primary mb-3">
+                        <i class="fas fa-info-circle me-2"></i>Current Status
+                    </h5>
+                    <div class="alert alert-@(Model.IsPaid == true ? "success" : isOverdue ? "danger" : "warning") mb-0">
+                        <p class="mb-0">
+                            <i class="fas fa-@(Model.IsPaid == true ? "check-circle" : isOverdue ? "exclamation-circle" : "clock") me-2"></i>
+                            This invoice is currently marked as @(Model.IsPaid == true ? "paid" : isOverdue ? "overdue" : "unpaid").
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-select, .form-control {
+        border-radius: 5px;
+    }
+
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-right: none;
+    }
+
+    .input-group .form-control {
+        border-left: none;
+    }
+
+    .alert {
+        border: none;
+        border-radius: 10px;
+    }
+</style>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -4,50 +4,97 @@
     ViewData["Title"] = "Edit Document";
 }
 
-<h2>✏️ Edit Document Info</h2>
-
-<form asp-action="Edit">
-    <input type="hidden" asp-for="DocumentId" />
-
-    <div class="form-group mb-3">
-        <label>Case</label>
-        <select asp-for="CaseId" class="form-control" required>
-            <option value="">Select Case</option>
-            @foreach (var c in (List<Case>)ViewData["CaseList"])
-            {
-                <option value="@c.CaseId" selected="@(c.CaseId == Model.CaseId)">
-                    @c.Title
-                </option>
-            }
-        </select>
+<div class="page-title-area">
+    <div class="container">
+        <h1 class="text-center mb-4">✏️ Edit Document</h1>
     </div>
+</div>
 
-    <div class="form-group mb-3">
-        <label>Document Type</label>
-        <input asp-for="DocumentType" class="form-control" />
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form asp-action="Edit" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4"></div>
+                        <input type="hidden" asp-for="DocumentId" />
+                        <input type="hidden" asp-for="FileName" />
+                        <input type="hidden" asp-for="FileType" />
+                        <input type="hidden" asp-for="UploadDate" />
+                        <input type="hidden" asp-for="UploadedBy" />
+
+                        <div class="mb-3">
+                            <label asp-for="CaseId" class="form-label">Case</label>
+                            <select asp-for="CaseId" class="form-select" asp-items="ViewBag.CaseId">
+                                <option value="">-- Select Case --</option>
+                            </select>
+                            <span asp-validation-for="CaseId" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DocumentType" class="form-label">Document Type</label>
+                            <input asp-for="DocumentType" class="form-control" />
+                            <span asp-validation-for="DocumentType" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input asp-for="IsPrivate" class="form-check-input" />
+                                <label asp-for="IsPrivate" class="form-check-label">Private Document</label>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="form-group mb-3">
-        <label>Is Private?</label>
-        <select asp-for="IsPrivate" class="form-control">
-            <option value="false">No</option>
-            <option value="true">Yes</option>
-        </select>
-    </div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
 
-    <div class="form-group mb-3">
-        <label>Uploaded By</label>
-        <select asp-for="UploadedBy" class="form-control">
-            <option value="">Select User</option>
-            @foreach (var u in (List<User>)ViewData["UserList"])
-            {
-                <option value="@u.UserId" selected="@(u.UserId == Model.UploadedBy)">
-                    @u.Username
-                </option>
-            }
-        </select>
-    </div>
+<style>
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
 
-    <button type="submit" class="btn btn-primary">Update</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+    .form-label {
+        font-weight: 500;
+        color: #333;
+        margin-bottom: 0.5rem;
+    }
+
+    .form-control, .form-select {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 0.75rem;
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #f18a00;
+        box-shadow: 0 0 0 0.2rem rgba(241, 138, 0, 0.25);
+    }
+
+    .form-check-input:checked {
+        background-color: #f18a00;
+        border-color: #f18a00;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+
+    .text-danger {
+        color: #dc3545 !important;
+    }
+</style>

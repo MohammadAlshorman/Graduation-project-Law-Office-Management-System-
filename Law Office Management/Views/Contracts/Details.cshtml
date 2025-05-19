@@ -2,39 +2,148 @@
 @{
     ViewData["Title"] = "Contract Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var today = DateOnly.FromDateTime(DateTime.Now);
+    var oneMonthLater = today.AddMonths(1);
 }
 
-<h2 class="mb-4">📄 Contract Details</h2>
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-file-contract text-primary"></i> Contract Details
+        </h2>
+        <div class="d-flex gap-2">
+            <a asp-action="Edit" asp-route-id="@Model.ContractId" class="btn btn-primary">
+                <i class="fas fa-edit me-2"></i>Edit
+            </a>
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i>Back
+            </a>
+        </div>
+    </div>
 
-<div class="card p-4">
-    <dl class="row">
-        <dt class="col-sm-3">Title</dt>
-        <dd class="col-sm-9">@Model.Title</dd>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="text-primary mb-4">Contract Information</h5>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">
+                                <i class="fas fa-file-alt me-2"></i>Title
+                            </label>
+                            <p class="mb-0 fw-bold">@Model.Title</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">
+                                <i class="fas fa-user me-2"></i>Client
+                            </label>
+                            <p class="mb-0 fw-bold">@Model.Client?.FullName</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">
+                                <i class="fas fa-user-tie me-2"></i>Lawyer
+                            </label>
+                            <p class="mb-0 fw-bold">@Model.Lawyer?.FullName</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">
+                                <i class="fas fa-calendar-plus me-2"></i>Start Date
+                            </label>
+                            <p class="mb-0 fw-bold">@Model.StartDate?.ToString("yyyy-MM-dd")</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">
+                                <i class="fas fa-calendar-check me-2"></i>End Date
+                            </label>
+                            <p class="mb-0 fw-bold">@Model.EndDate?.ToString("yyyy-MM-dd")</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label text-muted">
+                                <i class="fas fa-clock me-2"></i>Status
+                            </label>
+                            <p class="mb-0">
+                                @{
+                                    var isExpired = Model.EndDate.HasValue && Model.EndDate.Value < today;
+                                    var isExpiringSoon = Model.EndDate.HasValue && Model.EndDate.Value <= oneMonthLater && Model.EndDate.Value >= today;
+                                }
+                                <span class="badge bg-@(isExpired ? "danger" : isExpiringSoon ? "warning" : "success")">
+                                    <i class="fas fa-@(isExpired ? "times-circle" : isExpiringSoon ? "clock" : "check-circle") me-1"></i>
+                                    @(isExpired ? "Expired" : isExpiringSoon ? "Expiring Soon" : "Active")
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <dt class="col-sm-3">Client</dt>
-        <dd class="col-sm-9">@Model.Client?.FullName</dd>
-
-        <dt class="col-sm-3">Lawyer</dt>
-        <dd class="col-sm-9">@Model.Lawyer?.FullName</dd>
-
-        <dt class="col-sm-3">Start Date</dt>
-        <dd class="col-sm-9">@Model.StartDate?.ToString("yyyy-MM-dd")</dd>
-
-        <dt class="col-sm-3">End Date</dt>
-        <dd class="col-sm-9">@Model.EndDate?.ToString("yyyy-MM-dd")</dd>
-
-        <dt class="col-sm-3">File</dt>
-        <dd class="col-sm-9">
-            @if (!string.IsNullOrEmpty(Model.FilePath))
-            {
-                <a href="@Model.FilePath" target="_blank">📥 View File</a>
-            }
-            else
-            {
-                <span class="text-muted">No file</span>
-            }
-        </dd>
-    </dl>
-    <a asp-action="Edit" asp-route-id="@Model.ContractId" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-secondary">Back</a>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="text-primary mb-4">Contract File</h5>
+                    @if (!string.IsNullOrEmpty(Model.FilePath))
+                    {
+                        <div class="text-center">
+                            <i class="fas fa-file-pdf text-danger fa-4x mb-3"></i>
+                            <p class="mb-3">Contract document is available</p>
+                            <a href="@Model.FilePath" target="_blank" class="btn btn-primary w-100">
+                                <i class="fas fa-eye me-2"></i>View Contract
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center">
+                            <i class="fas fa-file-alt text-muted fa-4x mb-3"></i>
+                            <p class="mb-3">No contract file uploaded</p>
+                            <a asp-action="Edit" asp-route-id="@Model.ContractId" class="btn btn-primary w-100">
+                                <i class="fas fa-upload me-2"></i>Upload File
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .form-label {
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .fw-bold {
+        font-weight: 600 !important;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+        font-weight: 500;
+    }
+</style>

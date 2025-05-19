@@ -1,27 +1,130 @@
 ﻿@model Law_Office_Management.Models.Invoice
-
 @{
     ViewData["Title"] = "Delete Invoice";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    var today = DateOnly.FromDateTime(DateTime.Now);
+    var isOverdue = Model.IsPaid == false && Model.DueDate.HasValue && Model.DueDate.Value < today;
 }
 
-<h2>🗑 Delete Invoice</h2>
+<div class="container-fluid px-4">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-trash-alt text-danger"></i> Delete Invoice
+        </h2>
+    </div>
 
-<h4>Are you sure you want to delete this invoice?</h4>
-<hr />
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="alert alert-danger mb-4">
+                <h5 class="alert-heading">
+                    <i class="fas fa-exclamation-triangle me-2"></i>Warning!
+                </h5>
+                <p class="mb-0">Are you sure you want to delete this invoice? This action cannot be undone.</p>
+            </div>
 
-<dl class="row">
-    <dt class="col-sm-3">Client</dt>
-    <dd class="col-sm-9">@Model.Client?.FullName</dd>
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="text-primary mb-3">Invoice Information</h5>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-hashtag me-2"></i>Invoice ID
+                        </label>
+                        <p class="mb-0 fw-bold">@Model.InvoiceId</p>
+                    </div>
 
-    <dt class="col-sm-3">Amount</dt>
-    <dd class="col-sm-9">@Model.Amount?.ToString("C")</dd>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-user me-2"></i>Client
+                        </label>
+                        <p class="mb-0 fw-bold">@Model.Client?.FullName</p>
+                    </div>
 
-    <dt class="col-sm-3">Due Date</dt>
-    <dd class="col-sm-9">@Model.DueDate?.ToString("yyyy-MM-dd")</dd>
-</dl>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-dollar-sign me-2"></i>Amount
+                        </label>
+                        <p class="mb-0 fw-bold">@Model.Amount?.ToString("C")</p>
+                    </div>
+                </div>
 
-<form asp-action="Delete">
-    <input type="hidden" asp-for="InvoiceId" />
-    <button type="submit" class="btn btn-danger">Confirm Delete</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+                <div class="col-md-6">
+                    <h5 class="text-primary mb-3">Status & Dates</h5>
+                    <div class="mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-calendar me-2"></i>Due Date
+                        </label>
+                        <p class="mb-0 fw-bold">@Model.DueDate?.ToString("yyyy-MM-dd")</p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-clock me-2"></i>Status
+                        </label>
+                        <p class="mb-0">
+                            <span class="badge bg-@(Model.IsPaid == true ? "success" : isOverdue ? "danger" : "warning text-dark")">
+                                <i class="fas fa-@(Model.IsPaid == true ? "check-circle" : isOverdue ? "exclamation-circle" : "clock") me-1"></i>
+                                @(Model.IsPaid == true ? "Paid" : isOverdue ? "Overdue" : "Unpaid")
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label text-muted">
+                            <i class="fas fa-calendar-plus me-2"></i>Created At
+                        </label>
+                        <p class="mb-0 fw-bold">@Model.CreatedAt?.ToString("yyyy-MM-dd HH:mm")</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="InvoiceId" />
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i>Delete Invoice
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .form-label {
+        font-size: 0.875rem;
+        margin-bottom: 0.25rem;
+    }
+
+    .fw-bold {
+        font-weight: 600 !important;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+        font-weight: 500;
+    }
+
+    .alert {
+        border: none;
+        border-radius: 10px;
+    }
+</style>

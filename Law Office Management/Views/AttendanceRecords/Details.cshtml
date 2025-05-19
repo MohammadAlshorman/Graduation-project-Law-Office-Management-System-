@@ -1,24 +1,107 @@
 ﻿@model Law_Office_Management.Models.AttendanceRecord
 @{
     ViewData["Title"] = "Attendance Record Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>📋 Attendance Record Details</h2>
+<div class="container-fluid px-4">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-info-circle text-primary"></i> Attendance Record Details
+        </h2>
+    </div>
 
-<dl class="row">
-    <dt class="col-sm-3">Lawyer</dt>
-    <dd class="col-sm-9">@Model.Lawyer?.FullName</dd>
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="text-primary mb-3">Basic Information</h5>
+                    <dl class="row">
+                        <dt class="col-sm-4">Lawyer</dt>
+                        <dd class="col-sm-8">
+                            <i class="fas fa-user text-muted me-2"></i>
+                            @Model.Lawyer?.FullName
+                        </dd>
 
-    <dt class="col-sm-3">Check In</dt>
-    <dd class="col-sm-9">@Model.CheckInTime?.ToString("yyyy-MM-dd HH:mm")</dd>
+                        <dt class="col-sm-4">Check In</dt>
+                        <dd class="col-sm-8">
+                            <i class="fas fa-sign-in-alt text-muted me-2"></i>
+                            @Model.CheckInTime?.ToString("yyyy-MM-dd HH:mm")
+                        </dd>
+                    </dl>
+                </div>
+                <div class="col-md-6">
+                    <h5 class="text-primary mb-3">Additional Information</h5>
+                    <dl class="row">
+                        <dt class="col-sm-4">Check Out</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.CheckOutTime.HasValue)
+                            {
+                                <i class="fas fa-sign-out-alt text-muted me-2"></i>
+                                @Model.CheckOutTime.Value.ToString("yyyy-MM-dd HH:mm")
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">Active</span>
+                            }
+                        </dd>
 
-    <dt class="col-sm-3">Check Out</dt>
-    <dd class="col-sm-9">
-        @(Model.CheckOutTime.HasValue ? Model.CheckOutTime?.ToString("yyyy-MM-dd HH:mm") : "—")
-    </dd>
+                        <dt class="col-sm-4">Notes</dt>
+                        <dd class="col-sm-8">
+                            <i class="fas fa-sticky-note text-muted me-2"></i>
+                            @Model.Notes
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <dt class="col-sm-3">Notes</dt>
-    <dd class="col-sm-9">@Model.Notes</dd>
-</dl>
+    <div class="d-flex gap-2">
+        <a asp-action="Edit" asp-route-id="@Model.AttendanceId" class="btn btn-primary">
+            <i class="fas fa-edit me-2"></i>Edit
+        </a>
+        <a asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Back
+        </a>
+    </div>
+</div>
 
-<a asp-action="Index" class="btn btn-secondary">Back</a>
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    dt {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    dd {
+        margin-bottom: 1rem;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+    }
+</style>

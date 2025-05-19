@@ -4,20 +4,104 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2 class="mb-4">📄 Verdict Details</h2>
+<div class="container-fluid px-4">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-file-alt text-primary"></i> Verdict Details
+        </h2>
+    </div>
 
-<div class="card p-4">
-    <dl class="row">
-        <dt class="col-sm-3">Case</dt>
-        <dd class="col-sm-9">@Model.Case?.Title</dd>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="text-primary mb-3">Case Information</h5>
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            <i class="fas fa-folder text-muted me-2"></i>Case
+                        </dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-primary">
+                                <i class="fas fa-folder me-1"></i>
+                                @Model.Case?.Title
+                            </span>
+                        </dd>
 
-        <dt class="col-sm-3">Summary</dt>
-        <dd class="col-sm-9">@Model.Summary</dd>
+                        <dt class="col-sm-4">
+                            <i class="fas fa-calendar-alt text-muted me-2"></i>Verdict Date
+                        </dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-light text-dark">
+                                <i class="fas fa-calendar-alt me-1"></i>
+                                @Model.VerdictDate?.ToString("yyyy-MM-dd")
+                            </span>
+                        </dd>
+                    </dl>
+                </div>
 
-        <dt class="col-sm-3">Verdict Date</dt>
-        <dd class="col-sm-9">@Model.VerdictDate?.ToString("yyyy-MM-dd")</dd>
-    </dl>
+                <div class="col-md-6">
+                    <h5 class="text-primary mb-3">Verdict Summary</h5>
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <p class="mb-0">@Model.Summary</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+            <div class="d-flex gap-2">
+                <a asp-action="Edit" asp-route-id="@Model.VerdictId" class="btn btn-primary">
+                    <i class="fas fa-edit me-2"></i>Edit
+                </a>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i>Back
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
 
-<a asp-action="Edit" asp-route-id="@Model.VerdictId" class="btn btn-warning mt-3"><i class="fas fa-edit"></i> Edit</a>
-<a asp-action="Index" class="btn btn-secondary mt-3">Back to List</a>
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .bg-primary {
+        background-color: var(--primary-color) !important;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    dt {
+        font-weight: 600;
+        color: #6c757d;
+    }
+
+    dd {
+        margin-bottom: 0.5rem;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+        font-weight: 500;
+    }
+</style>

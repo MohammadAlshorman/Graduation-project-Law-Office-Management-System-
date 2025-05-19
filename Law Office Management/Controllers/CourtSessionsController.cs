@@ -17,17 +17,29 @@ namespace Law_Office_Management.Controllers
         }
 
         private string GetRole() => HttpContext.Session.GetString("Role") ?? "";
+        private int? GetUserId() => HttpContext.Session.GetInt32("UserId");
 
+        // ✅ INDEX
         public async Task<IActionResult> Index()
         {
-            var sessions = await _context.CourtSessions
+            var role = GetRole();
+            var userId = GetUserId();
+
+            var query = _context.CourtSessions
                 .Include(s => s.Case)
                 .ThenInclude(c => c.Lawyer)
-                .ToListAsync();
+                .AsQueryable();
 
+            if (role == "Lawyer" && userId.HasValue)
+            {
+                query = query.Where(s => s.Case != null && s.Case.LawyerId == userId.Value);
+            }
+
+            var sessions = await query.ToListAsync();
             return View(sessions);
         }
 
+        // ✅ DETAILS
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
@@ -42,6 +54,7 @@ namespace Law_Office_Management.Controllers
             return View(session);
         }
 
+        // ✅ CREATE (GET)
         public IActionResult Create()
         {
             if (GetRole() != "Admin") return RedirectToAction("AccessDenied", "Home");
@@ -50,6 +63,7 @@ namespace Law_Office_Management.Controllers
             return View();
         }
 
+        // ✅ CREATE (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CourtSession session)
@@ -65,7 +79,10 @@ namespace Law_Office_Management.Controllers
             _context.CourtSessions.Add(session);
             await _context.SaveChangesAsync();
 
-            var relatedCase = await _context.Cases.Include(c => c.Lawyer).FirstOrDefaultAsync(c => c.CaseId == session.CaseId);
+            var relatedCase = await _context.Cases
+                .Include(c => c.Lawyer)
+                .FirstOrDefaultAsync(c => c.CaseId == session.CaseId);
+
             if (relatedCase != null && relatedCase.LawyerId != null)
             {
                 await _notificationService.CreateAsync(
@@ -80,6 +97,7 @@ namespace Law_Office_Management.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        // ✅ EDIT (GET)
         public async Task<IActionResult> Edit(int? id)
         {
             if (GetRole() != "Admin") return RedirectToAction("AccessDenied", "Home");
@@ -93,6 +111,7 @@ namespace Law_Office_Management.Controllers
             return View(session);
         }
 
+        // ✅ EDIT (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, CourtSession session)
@@ -114,13 +133,16 @@ namespace Law_Office_Management.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!_context.CourtSessions.Any(e => e.SessionId == id)) return NotFound();
-                else throw;
+                if (!_context.CourtSessions.Any(e => e.SessionId == id))
+                    return NotFound();
+                else
+                    throw;
             }
 
             return RedirectToAction(nameof(Index));
         }
 
+        // ✅ DELETE (GET)
         public async Task<IActionResult> Delete(int? id)
         {
             if (GetRole() != "Admin") return RedirectToAction("AccessDenied", "Home");
@@ -129,6 +151,7 @@ namespace Law_Office_Management.Controllers
 
             var session = await _context.CourtSessions
                 .Include(s => s.Case)
+                .ThenInclude(c => c.Lawyer)
                 .FirstOrDefaultAsync(s => s.SessionId == id);
 
             if (session == null) return NotFound();
@@ -136,9 +159,10 @@ namespace Law_Office_Management.Controllers
             return View(session);
         }
 
-        [HttpPost, ActionName("Delete")]
+        // ✅ DELETE (POST)
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             if (GetRole() != "Admin") return RedirectToAction("AccessDenied", "Home");
 

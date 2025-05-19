@@ -1,40 +1,122 @@
 ﻿@model Law_Office_Management.Models.AppTask
 @{
     ViewData["Title"] = "Create Task";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>@ViewData["Title"]</h2>
+<div class="container-fluid px-4">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-plus-circle text-primary"></i> Create Task
+        </h2>
+    </div>
 
-<form asp-action="Create">
-    <div class="form-group">
-        <label>Title</label>
-        <input asp-for="Title" class="form-control" />
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="text-primary mb-3">Basic Information</h5>
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label">Title</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-heading"></i></span>
+                                <input asp-for="Title" class="form-control" required />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Description</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-align-left"></i></span>
+                                <textarea asp-for="Description" class="form-control" rows="4" required></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <h5 class="text-primary mb-3">Task Details</h5>
+                        <div class="mb-3">
+                            <label asp-for="LawyerId" class="form-label">Lawyer</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
+                                <select asp-for="LawyerId" class="form-select" required>
+                                    <option value="">-- Select Lawyer --</option>
+                                    @foreach (var lawyer in (List<Lawyer>)ViewData["LawyerList"])
+                                    {
+                                        <option value="@lawyer.LawyerId">@lawyer.FullName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="DueDate" class="form-label">Due Date</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-calendar"></i></span>
+                                <input asp-for="DueDate" type="date" class="form-control" required />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="IsCompleted" class="form-label">Status</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-tasks"></i></span>
+                                <select asp-for="IsCompleted" class="form-select" required>
+                                    <option value="false">In Progress</option>
+                                    <option value="true">Completed</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Create
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back
+                    </a>
+                </div>
+            </form>
+        </div>
     </div>
-    <div class="form-group">
-        <label>Description</label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-    </div>
-    <div class="form-group">
-        <label>Lawyer</label>
-        <select asp-for="LawyerId" class="form-control">
-            <option value="">-- Select Lawyer --</option>
-            @foreach (var lawyer in (List<Lawyer>)ViewData["LawyerList"])
-            {
-                <option value="@lawyer.LawyerId">@lawyer.FullName</option>
-            }
-        </select>
-    </div>
-    <div class="form-group">
-        <label>Due Date</label>
-        <input asp-for="DueDate" type="date" class="form-control" />
-    </div>
-    <div class="form-group">
-        <label>Status</label>
-        <select asp-for="IsCompleted" class="form-control">
-            <option value="false">In Progress</option>
-            <option value="true">Completed</option>
-        </select>
-    </div>
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+</div>
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-color: #ced4da;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(241, 138, 0, 0.15);
+    }
+</style>

@@ -3,65 +3,231 @@
 
 @{
     ViewData["Title"] = "Attendance Records";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
     var role = HttpContextAccessor.HttpContext?.Session.GetString("Role");
     var userId = HttpContextAccessor.HttpContext?.Session.GetInt32("UserId");
     bool isAdmin = role == "Admin";
     bool isLawyer = role == "Lawyer";
+
+    // Statistics
+    var totalRecords = Model.Count();
+    var activeRecords = Model.Count(r => r.CheckOutTime == null);
+    var completedRecords = Model.Count(r => r.CheckOutTime != null);
 }
 
-<h2>🕒 Attendance Records</h2>
-
-@if (isAdmin || isLawyer)
-{
-    <a asp-action="Create" class="btn btn-success mb-3">➕ Add New Record</a>
-}
-
-@if (TempData["SuccessMessage"] != null)
-{
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
-}
-
-<table class="table table-bordered table-striped">
-    <thead class="table-dark">
-        <tr>
-            <th>Lawyer</th>
-            <th>Check In</th>
-            <th>Check Out</th>
-            <th>Notes</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var record in Model)
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-clock text-primary"></i> Attendance Records
+        </h2>
+        @if (isAdmin || isLawyer)
         {
-            if (isLawyer && record.Lawyer?.UserId != userId)
-            {
-                continue;
-            }
-
-            <tr>
-                <td>@record.Lawyer?.FullName</td>
-                <td>@record.CheckInTime?.ToString("yyyy-MM-dd HH:mm")</td>
-                <td>@(record.CheckOutTime.HasValue ? record.CheckOutTime.Value.ToString("yyyy-MM-dd HH:mm") : "—")</td>
-                <td>@record.Notes</td>
-                <td>
-                    <a asp-action="Details" asp-route-id="@record.AttendanceId" class="btn btn-sm btn-info">View</a>
-
-                    @if (isAdmin)
-                    {
-                        <a asp-action="Edit" asp-route-id="@record.AttendanceId" class="btn btn-sm btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@record.AttendanceId" class="btn btn-sm btn-danger">Delete</a>
-                    }
-
-                    @* ✅ عرض زر Check Out فقط إذا لم يُسجل مسبقًا *@
-                    @if (record.CheckOutTime == null && (isAdmin || (isLawyer && record.Lawyer?.UserId == userId)))
-                    {
-                        <form asp-action="MarkCheckOut" asp-route-id="@record.AttendanceId" method="post" style="display:inline;">
-                            <button type="submit" class="btn btn-outline-success btn-sm">🚪 Check Out</button>
-                        </form>
-                    }
-                </td>
-            </tr>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Add New Record
+            </a>
         }
-    </tbody>
-</table>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fas fa-check-circle me-2"></i>
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <div class="row mb-4">
+        <div class="col-md-4">
+            <div class="card bg-primary text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Total Records</h6>
+                            <h2 class="mb-0">@totalRecords</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-clipboard-list"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-warning text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Active Records</h6>
+                            <h2 class="mb-0">@activeRecords</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-user-clock"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-success text-white h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="text-uppercase mb-2">Completed Records</h6>
+                            <h2 class="mb-0">@completedRecords</h2>
+                        </div>
+                        <div class="fs-1">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr class="bg-light">
+                            <th>Lawyer</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Notes</th>
+                            <th class="text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var record in Model)
+                        {
+                            if (isLawyer && record.Lawyer?.UserId != userId)
+                            {
+                                continue;
+                            }
+
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="fas fa-user text-primary me-2"></i>
+                                        @record.Lawyer?.FullName
+                                    </div>
+                                </td>
+                                <td>
+                                    <i class="fas fa-sign-in-alt text-muted me-2"></i>
+                                    @record.CheckInTime?.ToString("yyyy-MM-dd HH:mm")
+                                </td>
+                                <td>
+                                    @if (record.CheckOutTime.HasValue)
+                                    {
+                                        <i class="fas fa-sign-out-alt text-muted me-2"></i>
+                                        @record.CheckOutTime.Value.ToString("yyyy-MM-dd HH:mm")
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-warning">Active</span>
+                                    }
+                                </td>
+                                <td>
+                                    <i class="fas fa-sticky-note text-muted me-2"></i>
+                                    @record.Notes
+                                </td>
+                                <td>
+                                    <div class="d-flex justify-content-center gap-2">
+                                        <a asp-action="Details" asp-route-id="@record.AttendanceId" class="btn btn-info btn-sm">
+                                            <i class="fas fa-info-circle"></i>
+                                        </a>
+
+                                        @if (isAdmin)
+                                        {
+                                            <a asp-action="Edit" asp-route-id="@record.AttendanceId" class="btn btn-warning btn-sm">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@record.AttendanceId" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </a>
+                                        }
+
+                                        @if (record.CheckOutTime == null && (isAdmin || (isLawyer && record.Lawyer?.UserId == userId)))
+                                        {
+                                            <form asp-action="MarkCheckOut" asp-route-id="@record.AttendanceId" method="post" style="display:inline;">
+                                                <button type="submit" class="btn btn-success btn-sm">
+                                                    <i class="fas fa-sign-out-alt"></i>
+                                                </button>
+                                            </form>
+                                        }
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .bg-primary {
+        background-color: var(--primary-color) !important;
+    }
+
+    .table th {
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .table {
+        margin-bottom: 0;
+    }
+
+    .card .fs-1 {
+        opacity: 0.8;
+    }
+
+    .card h6 {
+        font-size: 0.875rem;
+        font-weight: 500;
+    }
+
+    .card h2 {
+        font-size: 2rem;
+        font-weight: 600;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+    }
+</style>

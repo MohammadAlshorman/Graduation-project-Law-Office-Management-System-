@@ -2,56 +2,31 @@
 
 @{
     ViewData["Title"] = "Documents";
-    var primaryColor = "#F18A00"; // Primary Color Variable
 }
 
-<style>
-    :root {
-        --primary-color: @primaryColor;
-    }
+<div class="page-title-area">
+    <div class="container">
+        <h1 class="text-center mb-4">📁 Document Management</h1>
+    </div>
+</div>
 
-    .custom-header {
-        background: linear-gradient(145deg, @primaryColor, #ff9e2c);
-        color: white !important;
-        border: none;
-        padding: 1rem;
-    }
-
-    .table-hover tbody tr:hover {
-        background-color: rgba(241, 138, 0, 0.05);
-        transform: scale(1.005);
-        transition: all 0.2s ease;
-    }
-
-    .action-buttons .btn {
-        margin: 2px;
-        min-width: 90px;
-        font-size: 0.85rem;
-        border-radius: 20px;
-    }
-
-    .badge-private {
-        background: @primaryColor;
-        color: white;
-        padding: 4px 10px;
-        border-radius: 12px;
-        font-size: 0.8rem;
-    }
-</style>
-
-<div class="container-fluid py-4">
+<div class="container">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold" style="color: @primaryColor">📁 Document Management</h2>
-        <a asp-action="Create" class="btn btn-primary" style="background-color: @primaryColor; border: none">
-            ➕ Upload New
+        <div class="d-flex align-items-center">
+            <div class="me-3">
+                <span class="badge bg-primary" style="background-color: #f18a00 !important;">Total: @Model.Count()</span>
+            </div>
+            <div>
+                <span class="badge bg-success">Public: @Model.Count(d => d.IsPrivate == false)</span>
+                <span class="badge bg-danger ms-2">Private: @Model.Count(d => d.IsPrivate == true)</span>
+            </div>
+        </div>
+        <a asp-action="Create" class="btn btn-primary" style="background-color: #f18a00; border-color: #f18a00;">
+            <i class="fas fa-plus me-2"></i>Upload New Document
         </a>
     </div>
 
     <div class="card shadow-sm">
-        <div class="card-header custom-header">
-            <h5 class="mb-0">Documents List</h5>
-        </div>
-
         <div class="card-body p-0">
             <div class="table-responsive">
                 <table class="table table-hover mb-0">
@@ -72,34 +47,48 @@
                         {
                             <tr>
                                 <td>
-                                    <span class="badge bg-secondary me-2">@doc.FileType</span>
-                                    @doc.FileName
+                                    <div class="d-flex align-items-center">
+                                        <span class="badge bg-secondary me-2">@doc.FileType</span>
+                                        <span class="text-truncate" style="max-width: 200px;">@doc.FileName</span>
+                                    </div>
                                 </td>
                                 <td>@doc.FileType</td>
                                 <td>@doc.DocumentType</td>
                                 <td>@doc.Case?.Title</td>
                                 <td>@doc.UploadedByNavigation?.Username</td>
-                                <td>@doc.UploadDate?.ToString("MMM dd, yyyy HH:mm")</td>
+                                <td>@(doc.UploadDate?.ToString("MMM dd, yyyy HH:mm"))</td>
                                 <td>
                                     @if (doc.IsPrivate == true)
                                     {
-                                        <span class="badge-private">🔒 Private</span>
+                                        <span class="badge bg-danger">
+                                            <i class="fas fa-lock me-1"></i>Private
+                                        </span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-success">🔓 Public</span>
+                                        <span class="badge bg-success">
+                                            <i class="fas fa-globe me-1"></i>Public
+                                        </span>
                                     }
                                 </td>
-                                <td class="action-buttons">
-                                    <div class="d-flex flex-wrap">
-                                        <a asp-action="Details" asp-route-id="@doc.DocumentId"
-                                           class="btn btn-sm btn-outline-secondary">👁️ View</a>
-                                        <a asp-action="Edit" asp-route-id="@doc.DocumentId"
-                                           class="btn btn-sm btn-outline-warning">✏️ Edit</a>
-                                        <a asp-action="Delete" asp-route-id="@doc.DocumentId"
-                                           class="btn btn-sm btn-outline-danger">🗑️ Delete</a>
-                                        <a asp-action="Download" asp-route-id="@doc.DocumentId"
-                                           class="btn btn-sm btn-outline-primary">⬇️ Download</a>
+                                <td>
+                                    <div class="btn-group">
+                                        <a asp-action="Details" asp-route-id="@doc.DocumentId" 
+                                           class="btn btn-sm btn-outline-secondary" title="View Details">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@doc.DocumentId" 
+                                           class="btn btn-sm btn-outline-warning" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@doc.DocumentId" 
+                                           class="btn btn-sm btn-outline-danger" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                        <a asp-action="Download" asp-route-id="@doc.DocumentId" 
+                                           class="btn btn-sm btn-outline-primary" title="Download">
+                                            <i class="fas fa-download"></i>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
@@ -110,3 +99,98 @@
         </div>
     </div>
 </div>
+
+<style>
+    .page-title-area {
+        background: linear-gradient(145deg, #f18a00, #ff9e2c);
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+    }
+
+    .page-title-area h1 {
+        color: white;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .table {
+        margin: 0;
+    }
+
+    .table thead th {
+        background-color: #f8f9fa;
+        border-bottom: 2px solid #dee2e6;
+        color: #495057;
+        font-weight: 600;
+        padding: 1rem;
+    }
+
+    .table tbody td {
+        padding: 1rem;
+        vertical-align: middle;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: rgba(241, 138, 0, 0.05);
+    }
+
+    .badge {
+        padding: 0.5em 0.8em;
+        font-weight: 500;
+    }
+
+    .btn-group {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .btn-group .btn {
+        padding: 0.375rem 0.75rem;
+        border-radius: 0;
+    }
+
+    .btn-group .btn:first-child {
+        border-top-left-radius: 4px;
+        border-bottom-left-radius: 4px;
+    }
+
+    .btn-group .btn:last-child {
+        border-top-right-radius: 4px;
+        border-bottom-right-radius: 4px;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-outline-warning:hover {
+        background-color: #ffc107;
+        border-color: #ffc107;
+    }
+
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    .btn-outline-primary:hover {
+        background-color: #f18a00;
+        border-color: #f18a00;
+    }
+
+    .btn-primary {
+        transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #d67a00 !important;
+        border-color: #d67a00 !important;
+        transform: translateY(-1px);
+    }
+</style>

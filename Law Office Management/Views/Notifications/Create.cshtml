@@ -1,48 +1,132 @@
 ﻿@model Law_Office_Management.Models.Notification
 @{
     ViewData["Title"] = "Create Notification";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>➕ Create Notification</h2>
-
-<form asp-action="Create" method="post">
-    <div class="form-group mb-3">
-        <label>Title</label>
-        <input asp-for="Title" class="form-control" />
+<div class="container-fluid px-4">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-plus-circle text-primary"></i> Create Notification
+        </h2>
     </div>
 
-    <div class="form-group mb-3">
-        <label>Message</label>
-        <textarea asp-for="Message" class="form-control"></textarea>
-    </div>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="text-primary mb-3">Basic Information</h5>
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label">Title</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-heading"></i></span>
+                                <input asp-for="Title" class="form-control" required />
+                            </div>
+                        </div>
 
-    <div class="form-group mb-3">
-        <label>Type</label>
-        <input asp-for="Type" class="form-control" placeholder="e.g., Session, Task, Reminder" />
-    </div>
+                        <div class="mb-3">
+                            <label asp-for="Message" class="form-label">Message</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-comment-alt"></i></span>
+                                <textarea asp-for="Message" class="form-control" rows="4" required></textarea>
+                            </div>
+                        </div>
 
-    <div class="form-group mb-3">
-        <label>For User</label>
-        <select asp-for="UserId" class="form-control">
-            <option value="">-- Select User --</option>
-            @foreach (var u in (List<User>)ViewData["Users"])
-            {
-                <option value="@u.UserId">@u.Username</option>
-            }
-        </select>
-    </div>
+                        <div class="mb-3">
+                            <label asp-for="Type" class="form-label">Type</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-tag"></i></span>
+                                <select asp-for="Type" class="form-select" required>
+                                    <option value="">-- Select Type --</option>
+                                    <option value="Session">Session</option>
+                                    <option value="Task">Task</option>
+                                    <option value="Reminder">Reminder</option>
+                                    <option value="Update">Update</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="form-group mb-3">
-        <label>Related Case (optional)</label>
-        <select asp-for="RelatedCaseId" class="form-control">
-            <option value="">-- None --</option>
-            @foreach (var c in (List<Case>)ViewData["Cases"])
-            {
-                <option value="@c.CaseId">@c.Title</option>
-            }
-        </select>
-    </div>
+                    <div class="col-md-6">
+                        <h5 class="text-primary mb-3">Notification Details</h5>
+                        <div class="mb-3">
+                            <label asp-for="UserId" class="form-label">For User</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <select asp-for="UserId" class="form-select" required>
+                                    <option value="">-- Select User --</option>
+                                    @foreach (var u in (List<User>)ViewData["Users"])
+                                    {
+                                        <option value="@u.UserId">@u.Username</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
 
-    <button type="submit" class="btn btn-primary">Create</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+                        <div class="mb-3">
+                            <label asp-for="RelatedCaseId" class="form-label">Related Case (optional)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
+                                <select asp-for="RelatedCaseId" class="form-select">
+                                    <option value="">-- None --</option>
+                                    @foreach (var c in (List<Case>)ViewData["Cases"])
+                                    {
+                                        <option value="@c.CaseId">@c.Title</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Create
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-color: #ced4da;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(241, 138, 0, 0.15);
+    }
+</style>

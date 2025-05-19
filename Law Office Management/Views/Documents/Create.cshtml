@@ -4,49 +4,130 @@
     ViewData["Title"] = "Upload Document";
 }
 
-<h2>📤 Upload New Document</h2>
-
-<form asp-action="Create" enctype="multipart/form-data" method="post">
-    <div class="form-group mb-3">
-        <label>Case</label>
-        <select asp-for="CaseId" class="form-control" required>
-            <option value="">Select Case</option>
-            @foreach (var c in (List<Case>)ViewData["CaseList"])
-            {
-                <option value="@c.CaseId">@c.Title</option>
-            }
-        </select>
+<div class="page-title-area">
+    <div class="container">
+        <h1 class="text-center mb-4">📤 Upload New Document</h1>
     </div>
+</div>
 
-    <div class="form-group mb-3">
-        <label>Upload File</label>
-        <input type="file" name="file" class="form-control" required />
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <form asp-action="Create" enctype="multipart/form-data" method="post">
+                        <div class="form-group mb-4">
+                            <label class="form-label fw-bold">Case</label>
+                            <select asp-for="CaseId" class="form-control form-select" required>
+                                <option value="">-- Select Case --</option>
+                                @foreach (var c in (List<Case>)ViewData["CaseList"])
+                                {
+                                    <option value="@c.CaseId">@c.Title</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="form-label fw-bold">Upload File</label>
+                            <input type="file" name="file" class="form-control" required />
+                            <small class="text-muted">Supported formats: PDF, DOC, DOCX, JPG, PNG</small>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="form-label fw-bold">Document Type</label>
+                            <input asp-for="DocumentType" class="form-control" placeholder="e.g., Memo, Evidence, Contract" />
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="form-label fw-bold">Privacy</label>
+                            <select asp-for="IsPrivate" class="form-control form-select">
+                                <option value="false">Public</option>
+                                <option value="true">Private</option>
+                            </select>
+                            <small class="text-muted">Private documents are only visible to authorized users</small>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label class="form-label fw-bold">Uploaded By</label>
+                            <select asp-for="UploadedBy" class="form-control form-select">
+                                <option value="">-- Select User --</option>
+                                @foreach (var u in (List<User>)ViewData["UserList"])
+                                {
+                                    <option value="@u.UserId">@u.Username</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="d-flex gap-2 justify-content-end">
+                            <a asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-4" style="background-color: #f18a00; border-color: #f18a00;">
+                                <i class="fas fa-upload me-2"></i>Upload
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="form-group mb-3">
-        <label>Document Type</label>
-        <input asp-for="DocumentType" class="form-control" placeholder="e.g., Memorandum, Proof Document" />
-    </div>
+<style>
+    .page-title-area {
+        background: linear-gradient(145deg, #f18a00, #ff9e2c);
+        padding: 2rem 0;
+        margin-bottom: 2rem;
+    }
 
-    <div class="form-group mb-3">
-        <label>Is Private?</label>
-        <select asp-for="IsPrivate" class="form-control">
-            <option value="false">No</option>
-            <option value="true">Yes</option>
-        </select>
-    </div>
+    .page-title-area h1 {
+        color: white;
+        font-weight: 600;
+        margin: 0;
+    }
 
-    <div class="form-group mb-3">
-        <label>Uploaded By</label>
-        <select asp-for="UploadedBy" class="form-control">
-            <option value="">Select User</option>
-            @foreach (var u in (List<User>)ViewData["UserList"])
-            {
-                <option value="@u.UserId">@u.Username</option>
-            }
-        </select>
-    </div>
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
 
-    <button type="submit" class="btn btn-primary">Upload</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+    .form-label {
+        color: #333;
+        font-weight: 500;
+    }
+
+    .form-control, .form-select {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 0.75rem;
+        transition: all 0.2s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #f18a00;
+        box-shadow: 0 0 0 0.2rem rgba(241, 138, 0, 0.25);
+    }
+
+    .text-muted {
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .btn-primary {
+        transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #d67a00 !important;
+        border-color: #d67a00 !important;
+        transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+    }
+</style>

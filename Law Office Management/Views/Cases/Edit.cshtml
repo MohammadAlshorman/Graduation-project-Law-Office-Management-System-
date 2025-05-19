@@ -7,47 +7,149 @@
     var lawyers = ViewData["Lawyers"] as IEnumerable<Law_Office_Management.Models.Lawyer>;
 }
 
-<h2 class="mb-4">✏️ Edit Case</h2>
-
-<form asp-action="Edit" method="post" class="shadow-sm p-4 bg-white rounded">
-    <input type="hidden" asp-for="CaseId" />
-
-    <div class="mb-3">
-        <label asp-for="Title" class="form-label">Title</label>
-        <input asp-for="Title" class="form-control" />
+<div class="container-fluid px-4">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-edit text-primary"></i> Edit Case
+        </h2>
     </div>
 
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label">Description</label>
-        <textarea asp-for="Description" class="form-control" rows="4"></textarea>
-    </div>
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="CaseId" />
 
-    <div class="mb-3">
-        <label asp-for="Status" class="form-label">Status</label>
-        <input asp-for="Status" class="form-control" />
-    </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 class="text-primary mb-3">Basic Information</h5>
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label">Title</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-file-alt"></i></span>
+                                <input asp-for="Title" class="form-control" required />
+                            </div>
+                        </div>
 
-    <div class="mb-3">
-        <label asp-for="ClientId" class="form-label">Client</label>
-        <select asp-for="ClientId" class="form-select" asp-items="@(new SelectList(clients, "ClientId", "FullName", Model.ClientId))"></select>
-    </div>
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label">Description</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-align-left"></i></span>
+                                <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                            </div>
+                        </div>
 
-    <div class="mb-3">
-        <label asp-for="LawyerId" class="form-label">Lawyer</label>
-        <select asp-for="LawyerId" class="form-select" asp-items="@(new SelectList(lawyers, "LawyerId", "FullName", Model.LawyerId))"></select>
-    </div>
+                        <div class="mb-3">
+                            <label asp-for="Status" class="form-label">Status</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-tasks"></i></span>
+                                <select asp-for="Status" class="form-select">
+                                    <option value="Active">Active</option>
+                                    <option value="Closed">Closed</option>
+                                    <option value="Pending">Pending</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <label asp-for="StartDate" class="form-label">Start Date</label>
-            <input asp-for="StartDate" class="form-control" type="date" />
+                    <div class="col-md-6">
+                        <h5 class="text-primary mb-3">Case Details</h5>
+                        <div class="mb-3">
+                            <label asp-for="ClientId" class="form-label">Client</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                <select asp-for="ClientId" class="form-select" required>
+                                    <option value="">-- Select Client --</option>
+                                    @foreach (var client in clients)
+                                    {
+                                        <option value="@client.ClientId" selected="@(client.ClientId == Model.ClientId)">
+                                            @client.FullName
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="LawyerId" class="form-label">Lawyer</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-user-tie"></i></span>
+                                <select asp-for="LawyerId" class="form-select" required>
+                                    <option value="">-- Select Lawyer --</option>
+                                    @foreach (var lawyer in lawyers)
+                                    {
+                                        <option value="@lawyer.LawyerId" selected="@(lawyer.LawyerId == Model.LawyerId)">
+                                            @lawyer.FullName
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="StartDate" class="form-label">Start Date</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                    <input asp-for="StartDate" class="form-control" type="date" required />
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="EndDate" class="form-label">End Date</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-calendar-check"></i></span>
+                                    <input asp-for="EndDate" class="form-control" type="date" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr />
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save me-2"></i>Save Changes
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back
+                    </a>
+                </div>
+            </form>
         </div>
-        <div class="col-md-6 mb-3">
-            <label asp-for="EndDate" class="form-label">End Date</label>
-            <input asp-for="EndDate" class="form-control" type="date" />
-        </div>
     </div>
+</div>
 
-    <button type="submit" class="btn btn-success">Update</button>
-    <a asp-action="Index" class="btn btn-secondary">Back</a>
-</form>
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .btn-primary {
+        background-color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+
+    .btn-primary:hover {
+        background-color: var(--primary-hover);
+        border-color: var(--primary-hover);
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .input-group-text {
+        background-color: #f8f9fa;
+        border-color: #ced4da;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 0.25rem rgba(241, 138, 0, 0.15);
+    }
+</style>

@@ -4,14 +4,121 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2 class="text-danger mb-4">🗑️ Delete Case</h2>
+<div class="container-fluid px-4">
+    <div class="d-flex align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-trash-alt text-danger"></i> Delete Case
+        </h2>
+    </div>
 
-<div class="alert alert-warning">
-    Are you sure you want to delete the case "<strong>@Model.Title</strong>"?
+    <div class="alert alert-danger mb-4">
+        <i class="fas fa-exclamation-triangle me-2"></i>
+        Are you sure you want to delete this case? This action cannot be undone.
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="text-primary mb-3">Basic Information</h5>
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            <i class="fas fa-file-alt me-2"></i>Title
+                        </dt>
+                        <dd class="col-sm-8">@Model.Title</dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-align-left me-2"></i>Description
+                        </dt>
+                        <dd class="col-sm-8">@Model.Description</dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-tasks me-2"></i>Status
+                        </dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-@(Model.Status == "Active" ? "success" : Model.Status == "Closed" ? "danger" : "warning")">
+                                @Model.Status
+                            </span>
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="col-md-6">
+                    <h5 class="text-primary mb-3">Case Details</h5>
+                    <dl class="row">
+                        <dt class="col-sm-4">
+                            <i class="fas fa-user me-2"></i>Client
+                        </dt>
+                        <dd class="col-sm-8">@Model.Client?.FullName</dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-user-tie me-2"></i>Lawyer
+                        </dt>
+                        <dd class="col-sm-8">@Model.Lawyer?.FullName</dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-calendar-alt me-2"></i>Start Date
+                        </dt>
+                        <dd class="col-sm-8">
+                            @(Model.StartDate.HasValue ? Model.StartDate.Value.ToShortDateString() : "Not set")
+                        </dd>
+
+                        <dt class="col-sm-4">
+                            <i class="fas fa-calendar-check me-2"></i>End Date
+                        </dt>
+                        <dd class="col-sm-8">
+                            @(Model.EndDate.HasValue ? Model.EndDate.Value.ToShortDateString() : "Not set")
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <hr />
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="CaseId" />
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt me-2"></i>Delete
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Back
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
-<form asp-action="DeleteConfirmed" method="post">
-    <input type="hidden" asp-for="CaseId" />
-    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
-</form>
+<style>
+    :root {
+        --primary-color: #f18a00;
+        --primary-hover: #d97b00;
+    }
+
+    .text-primary {
+        color: var(--primary-color) !important;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    dt {
+        font-weight: 600;
+        color: #6c757d;
+    }
+
+    dd {
+        margin-bottom: 0.5rem;
+    }
+
+    .badge {
+        padding: 0.5em 0.75em;
+        font-weight: 500;
+    }
+
+    .alert {
+        border-radius: 10px;
+    }
+</style>
